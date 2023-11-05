@@ -1,0 +1,73 @@
+import { Cell } from "../Cell";
+import { Colors } from "../Colors";
+import { Piece, PiecesNames } from "./Piece";
+import { Board } from "../Board";
+import whiteLogo from '../../assets/pieces-png/king-w.png';
+import blackLogo from '../../assets/pieces-png/king-b.png';
+import { Rook } from "./Rook";
+
+export class King extends Piece{
+  isCheck: boolean = false;
+  isCheckMate: boolean = false;
+  canCastling: boolean = true;
+  hasMoved: boolean = false;
+  constructor(color: Colors, cell: Cell){
+    super(color, cell)
+    this.logo = color === Colors.BLACK ? blackLogo : whiteLogo;
+    this.name = PiecesNames.KING; 
+  }
+  public canMove(target: Cell): boolean {
+    if(!super.canMove(target)){
+      return false;
+    }
+    if(this.canCastling == true && this.color == Colors.WHITE&& this.cell.x == 4 && this.cell.y == 7&& (target.x == 6) && this.canCastling&& this.cell.isEmtyHorizontal(target) && this.cell.board.getCell(7, 7).piece?.name == PiecesNames.ROOK && this.isCheck == false && this.cell.board.getCell(6, 7).isEmpty() && this.cell.board.getCell(5, 7).isEmpty()){
+      return true;
+    }
+    if(this.canCastling == true && this.color == Colors.WHITE&& this.cell.x == 4 && this.cell.y == 7&& (target.x == 1) && this.canCastling&& this.cell.isEmtyHorizontal(target) && this.cell.board.getCell(0, 7).piece?.name == PiecesNames.ROOK && this.isCheck == false && this.cell.board.getCell(1, 7).isEmpty() && this.cell.board.getCell(2, 7).isEmpty()&& this.cell.board.getCell(3, 7).isEmpty()){
+      return true;
+    }
+    if(this.canCastling == true  && this.color == Colors.BLACK && this.cell.x == 4 && this.cell.y == 0 && (target.x == 6)  && this.canCastling && this.cell.isEmtyHorizontal(target)  && this.cell.board.getCell(7, 0).piece?.name == PiecesNames.ROOK  && this.isCheck == false  && this.cell.board.getCell(6, 0).isEmpty()  && this.cell.board.getCell(5, 0).isEmpty()){
+      return true;
+    }
+    if(this.canCastling == true  && this.color == Colors.BLACK && this.cell.x == 4 && this.cell.y == 0 && (target.x == 1)  && this.canCastling && this.cell.isEmtyHorizontal(target)  && this.cell.board.getCell(0, 0).piece?.name == PiecesNames.ROOK  && this.isCheck == false  && this.cell.board.getCell(1, 0).isEmpty()  && this.cell.board.getCell(2, 0).isEmpty() && this.cell.board.getCell(3, 0).isEmpty()){
+      return true;
+    }
+    
+    const x = Math.abs(this.cell.x - target.x);
+    const y = Math.abs(this.cell.y - target.y);
+    const dx = Math.abs(this.cell.x - target.x);
+    const dy = Math.abs(this.cell.y - target.y);
+    return (dx <= 1 && dy <= 1);
+  }
+  public movePiece(target: Cell): void {
+    super.movePiece(target);
+    if(this.color == Colors.WHITE){
+      if(this.canCastling == true && this.hasMoved == false && target.x == 6 && target.y == 7){
+        new Rook(Colors.WHITE, this.cell.board.getCell(5, 7));
+        this.cell.board.getCell(7, 7).piece = null;
+        this.canCastling = false;
+      }
+      if(this.canCastling == true && this.hasMoved == false && target.x == 1 && target.y == 7){
+        new Rook(Colors.WHITE, this.cell.board.getCell(2, 7));
+        this.cell.board.getCell(0, 7).piece = null;
+        this.canCastling = false;
+      }
+    }
+    if(this.color == Colors.BLACK){
+      if(this.canCastling == true && this.hasMoved == false && target.x == 6 && target.y == 0){
+        new Rook(Colors.BLACK, this.cell.board.getCell(5, 0));
+        this.cell.board.getCell(7, 0).piece = null;
+        this.canCastling = false;
+      }
+      if(this.canCastling == true && this.hasMoved == false && target.x == 1 && target.y == 0){
+        new Rook(Colors.BLACK, this.cell.board.getCell(2, 0));
+        this.cell.board.getCell(0, 0).piece = null;
+        this.canCastling = false;
+      }
+    }
+    this.hasMoved = true;
+    if(this.hasMoved == true){
+      this.canCastling = false;
+    }
+  }
+}
