@@ -21,15 +21,15 @@ body {
 .game{
   overflow: hidden;
   aspect-ratio: 1/1.1;
-  height: calc(98%);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  height: 100%;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .info-section{
-  width: 95%;
+  width: 100%;
   height: 40px;
   overflow: hidden;
   display: flex;
@@ -81,12 +81,21 @@ body {
   opacity: .8;
 }
 #root{
-  /*width: calc(95px*8);*/
+  height: 100%;
   background-color: #302e2b;
   border-radius: 5px;
   overflow: hidden;
   z-index: 1;
   margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.App{
+  height: 98%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .board{

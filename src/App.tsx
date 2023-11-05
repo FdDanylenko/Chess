@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import BoardComponent from './components/BoardComponent';
+import PlayerInfoComponent from './components/PlayerInfoComponent';
 import { Board } from './models/Board';
 
 function App() {
@@ -19,7 +20,9 @@ function App() {
 
   return (
     <div className="App">
+      <PlayerInfoComponent />
       <BoardComponent board={board} setBoard={setBoard} />
+      <PlayerInfoComponent />
     </div>
   );
 }
