@@ -151,9 +151,8 @@ body {
 }
 @media (max-aspect-ratio: 1/1) {
   .board{
-    width: none;
-    aspect-ratio: 1 / 1;
     width: 100%;
+    aspect-ratio: 1 / 1;
     display: flex;
     flex-wrap: wrap;
   }
