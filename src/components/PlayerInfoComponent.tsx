@@ -4,12 +4,12 @@ const PlayerInfoComponent = () => {
   return(
     <div className="info-section">
           <div className="player-info">
-            <div className="bot-icon"></div>
+            <div className="player-icon"></div>
             <div>
-              <div className="player-name">Bot</div>
+              <div className="player-name">Player</div>
             </div>
           </div>
-          <div className="bot-timer timer"><span>09:13</span></div>
+          <div className="timer"><span>09:13</span></div>
         </div>
   );
 };

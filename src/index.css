@@ -82,6 +82,7 @@ body {
 }
 #root{
   height: 100%;
+  aspect-ratio: 1/1.15;
   background-color: #302e2b;
   border-radius: 5px;
   overflow: hidden;
@@ -93,6 +94,7 @@ body {
 }
 .App{
   height: 98%;
+  aspect-ratio: 1/1.15;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -117,6 +119,7 @@ body {
   width: 90%;
   height: 90%; 
   position: relative;
+  z-index: 1;
 }
 
 .white{
@@ -147,34 +150,33 @@ body {
   box-shadow:0px 0px 0px 10px black inset;
 }
 @media (max-aspect-ratio: 1/1) {
-  #root{
-    width: none;
-    aspect-ratio: 1 / 1;
-    height: calc(100%-100px);
-    background-color: #302e2b;
-    border-radius: 5px;
-    z-index: 1;
-  }
-
   .board{
     width: none;
     aspect-ratio: 1 / 1;
-    height: 100%;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
   }
+  .App{
+    width: 99%;
+    aspect-ratio: 1/1.15;
+  }
+  #root{
+    height: 100%;
+  }
+  .info-section{
+    height: 40px;
+  }
 }
 @media (min-aspect-ratio: 1/1) {
-  #root{
-    aspect-ratio: 1 / 1;
-    width: 95%;
-    background-color: #302e2b;
-    border-radius: 5px;
-    z-index: 1;
+  .App{
+    height: 98%;
+    aspect-ratio: 1/1.15;
   }
-
+  #root{
+    height: 100%;
+  }
   .board{
-    aspect-ratio: 1 / 1;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
