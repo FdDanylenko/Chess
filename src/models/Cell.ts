@@ -1,6 +1,7 @@
 import { Colors } from "./Colors";
-import { Piece } from "./pieces/Piece";
+import { Piece, PiecesNames } from "./pieces/Piece";
 import { Board } from "./Board";
+import { King } from "./pieces/King";
 export class Cell{
   readonly x: number;
   readonly y: number;

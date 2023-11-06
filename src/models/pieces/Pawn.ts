@@ -3,6 +3,7 @@ import { Colors } from "../Colors";
 import { Piece, PiecesNames } from "./Piece";
 import whiteLogo from '../../assets/pieces-png/pawn-w.png';
 import blackLogo from '../../assets/pieces-png/pawn-b.png';
+import { King } from "./King";
 
 export class Pawn extends Piece{
   isFirstStep: boolean = true;
@@ -12,6 +13,16 @@ export class Pawn extends Piece{
     this.name = PiecesNames.PAWN; 
   }
   public canMove(target: Cell): boolean {
+    for (let i = 0; i < this.cell.board.cells.length; i++) {
+      const row = this.cell.board.cells[i]
+      for (let j = 0; j < row.length; j++) {
+        const target = row[j];
+        if (this.cell.board.getCell(i, j).piece instanceof King && (this.cell.board.getCell(i, j).piece as King).isCheck === true && this.cell.board.getCell(i, j).piece?.color === this.color) {
+          console.log("Check");
+          return false;
+        }
+      }
+    }
     if(!super.canMove(target)){
       return false
     }

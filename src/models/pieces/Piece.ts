@@ -35,23 +35,23 @@ export class Piece{
     if(target.piece?.color === this.color){
       return false;
     }
-    if(target.piece?.name === PiecesNames.KING){
-      return false;
-    }
+    // if(target.piece?.name === PiecesNames.KING){
+    //   return false;
+    // }
     return true;
   }
   public movePiece(target: Cell){
-    /*if(true){
-      for (let i = 0; i < this.cell.board.cells.length; i++) {
-        const row = this.cell.board.cells[i]
-        for (let j = 0; j < row.length; j++) {
-          const target = row[j];
-          if (target.piece?.name == PiecesNames.KING && target.piece?.color !== this.color) {
-            //target.piece?.isCheckMate? = true;
-          }
+    this.canMove(this.cell);
+    for (let i = 0; i < this.cell.board.cells.length; i++) {
+      const row = this.cell.board.cells[i]
+      for (let j = 0; j < row.length; j++) {
+        const target = row[j];
+        if (target.piece?.name === PiecesNames.KING && target.available === true && target.piece?.color !== this.color) {
+          (target.piece as King).isCheck = true;
+          console.log("Check");
         }
       }
-    }*/
+    }
   }
 }
 

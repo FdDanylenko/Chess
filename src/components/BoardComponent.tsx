@@ -3,23 +3,28 @@ import { Board } from "../models/Board";
 import CellComponent from "./CellComponent";
 import { Cell } from "../models/Cell";
 import userEvent from "@testing-library/user-event";
+import { Player } from "../models/Player";
 
 interface BoardProps{
   board: Board;
   setBoard: (board: Board) => void;
+  currentPlayer: Player | null;
+  swapPlayer: () => void;
 }
 
-const BoardComponent: FC<BoardProps> = ({board, setBoard}) => {
+const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPlayer}) => {
   const [selectedCell, setSelectedCell] = useState<Cell | null>(null);
-
   function click(cell: Cell){
     if(cell.piece){
     }
     if(selectedCell && selectedCell !== cell && selectedCell.piece?.canMove(cell)){
       selectedCell.movePiece(cell);
+      swapPlayer();
       setSelectedCell(null);
     }else{
-      setSelectedCell(cell);
+      if(cell.piece?.color === currentPlayer?.color){
+        setSelectedCell(cell);
+      }
     }
   }
 

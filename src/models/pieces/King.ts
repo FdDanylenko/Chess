@@ -20,16 +20,16 @@ export class King extends Piece{
     if(!super.canMove(target)){
       return false;
     }
-    if(this.canCastling == true && this.color == Colors.WHITE&& this.cell.x == 4 && this.cell.y == 7&& (target.x == 6) && this.canCastling&& this.cell.isEmtyHorizontal(target) && this.cell.board.getCell(7, 7).piece?.name == PiecesNames.ROOK && this.isCheck == false && this.cell.board.getCell(6, 7).isEmpty() && this.cell.board.getCell(5, 7).isEmpty()){
+    if(this.canCastling == true && this.color == Colors.WHITE&& this.cell.x == 4 && this.cell.y == 7 && (target.x == 6) && this.canCastling&& this.cell.isEmtyHorizontal(target) && this.cell.board.getCell(7, 7).piece?.name == PiecesNames.ROOK && this.isCheck == false && this.cell.board.getCell(6, 7).isEmpty() && this.cell.board.getCell(5, 7).isEmpty()){
       return true;
     }
-    if(this.canCastling == true && this.color == Colors.WHITE&& this.cell.x == 4 && this.cell.y == 7&& (target.x == 1) && this.canCastling&& this.cell.isEmtyHorizontal(target) && this.cell.board.getCell(0, 7).piece?.name == PiecesNames.ROOK && this.isCheck == false && this.cell.board.getCell(1, 7).isEmpty() && this.cell.board.getCell(2, 7).isEmpty()&& this.cell.board.getCell(3, 7).isEmpty()){
+    if(this.canCastling == true && this.color == Colors.WHITE&& this.cell.x == 4 && this.cell.y == 7 && (target.x == 2) && this.canCastling&& this.cell.isEmtyHorizontal(target) && this.cell.board.getCell(0, 7).piece?.name == PiecesNames.ROOK && this.isCheck == false && this.cell.board.getCell(1, 7).isEmpty() && this.cell.board.getCell(2, 7).isEmpty()&& this.cell.board.getCell(3, 7).isEmpty()){
       return true;
     }
     if(this.canCastling == true  && this.color == Colors.BLACK && this.cell.x == 4 && this.cell.y == 0 && (target.x == 6)  && this.canCastling && this.cell.isEmtyHorizontal(target)  && this.cell.board.getCell(7, 0).piece?.name == PiecesNames.ROOK  && this.isCheck == false  && this.cell.board.getCell(6, 0).isEmpty()  && this.cell.board.getCell(5, 0).isEmpty()){
       return true;
     }
-    if(this.canCastling == true  && this.color == Colors.BLACK && this.cell.x == 4 && this.cell.y == 0 && (target.x == 1)  && this.canCastling && this.cell.isEmtyHorizontal(target)  && this.cell.board.getCell(0, 0).piece?.name == PiecesNames.ROOK  && this.isCheck == false  && this.cell.board.getCell(1, 0).isEmpty()  && this.cell.board.getCell(2, 0).isEmpty() && this.cell.board.getCell(3, 0).isEmpty()){
+    if(this.canCastling == true  && this.color == Colors.BLACK && this.cell.x == 4 && this.cell.y == 0 && (target.x == 2)  && this.canCastling && this.cell.isEmtyHorizontal(target)  && this.cell.board.getCell(0, 0).piece?.name == PiecesNames.ROOK  && this.isCheck == false  && this.cell.board.getCell(1, 0).isEmpty()  && this.cell.board.getCell(2, 0).isEmpty() && this.cell.board.getCell(3, 0).isEmpty()){
       return true;
     }
     
@@ -47,8 +47,8 @@ export class King extends Piece{
         this.cell.board.getCell(7, 7).piece = null;
         this.canCastling = false;
       }
-      if(this.canCastling == true && this.hasMoved == false && target.x == 1 && target.y == 7){
-        new Rook(Colors.WHITE, this.cell.board.getCell(2, 7));
+      if(this.canCastling == true && this.hasMoved == false && target.x == 2 && target.y == 7){
+        new Rook(Colors.WHITE, this.cell.board.getCell(3, 7));
         this.cell.board.getCell(0, 7).piece = null;
         this.canCastling = false;
       }
@@ -59,8 +59,8 @@ export class King extends Piece{
         this.cell.board.getCell(7, 0).piece = null;
         this.canCastling = false;
       }
-      if(this.canCastling == true && this.hasMoved == false && target.x == 1 && target.y == 0){
-        new Rook(Colors.BLACK, this.cell.board.getCell(2, 0));
+      if(this.canCastling == true && this.hasMoved == false && target.x == 2 && target.y == 0){
+        new Rook(Colors.BLACK, this.cell.board.getCell(3, 0));
         this.cell.board.getCell(0, 0).piece = null;
         this.canCastling = false;
       }
