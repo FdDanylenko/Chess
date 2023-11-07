@@ -1,8 +1,10 @@
 import { Cell } from "../Cell";
 import { Colors } from "../Colors";
-import { Piece, PiecesNames } from "./Piece";
+import { Piece } from "./Piece";
+import { PiecesNames } from './PiecesNames';
 import whiteLogo from '../../assets/pieces-png/knight-w.png';
 import blackLogo from '../../assets/pieces-png/knight-b.png';
+import { King } from "./King";
 
 export class Knight extends Piece{
   constructor(color: Colors, cell: Cell){

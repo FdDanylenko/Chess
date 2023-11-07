@@ -1,5 +1,6 @@
 import { Colors } from "./Colors";
-import { Piece, PiecesNames } from "./pieces/Piece";
+import { Piece } from "./pieces/Piece";
+import { PiecesNames } from "./pieces/PiecesNames";
 import { Board } from "./Board";
 import { King } from "./pieces/King";
 export class Cell{
@@ -77,9 +78,11 @@ export class Cell{
   }
   movePiece(target: Cell){
     if(this.piece && this.piece?.canMove(target)){
-      this.piece?.movePiece(target)
+      this.piece?.movePiece(target);
       target.setPiece(this.piece);
       this.piece = null;
+      return 1;
     }
+    return 0;
   }
 }

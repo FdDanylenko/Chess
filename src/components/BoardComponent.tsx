@@ -4,6 +4,8 @@ import CellComponent from "./CellComponent";
 import { Cell } from "../models/Cell";
 import userEvent from "@testing-library/user-event";
 import { Player } from "../models/Player";
+import { King } from "../models/pieces/King";
+import { PiecesNames } from "../models/pieces/PiecesNames";
 
 interface BoardProps{
   board: Board;
@@ -14,13 +16,14 @@ interface BoardProps{
 
 const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPlayer}) => {
   const [selectedCell, setSelectedCell] = useState<Cell | null>(null);
+  const [king, setKing] = useState<Cell | null>(null);
   function click(cell: Cell){
     if(cell.piece){
     }
     if(selectedCell && selectedCell !== cell && selectedCell.piece?.canMove(cell)){
       selectedCell.movePiece(cell);
-      swapPlayer();
       setSelectedCell(null);
+      swapPlayer();
     }else{
       if(cell.piece?.color === currentPlayer?.color){
         setSelectedCell(cell);

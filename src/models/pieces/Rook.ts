@@ -1,6 +1,7 @@
 import { Cell } from "../Cell";
 import { Colors } from "../Colors";
-import { Piece, PiecesNames } from "./Piece";
+import { Piece } from "./Piece";
+import { PiecesNames } from './PiecesNames';
 import whiteLogo from '../../assets/pieces-png/rook-w.png';
 import blackLogo from '../../assets/pieces-png/rook-b.png';
 

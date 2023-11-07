@@ -54,9 +54,9 @@ export class Board{
     new Knight(Colors.WHITE, this.getCell(6, 7));
     new Rook(Colors.WHITE, this.getCell(0, 7));
     new Rook(Colors.WHITE, this.getCell(7, 7));
-    for (let i = 0; i < 8; i++) {
-      new Pawn(Colors.WHITE, this.getCell(i, 6));
-    }
+    // for (let i = 0; i < 8; i++) {
+    //   new Pawn(Colors.WHITE, this.getCell(i, 6));
+    // }
     //============================================
     new King(Colors.BLACK, this.getCell(4, 0));
     new Queen(Colors.BLACK, this.getCell(3, 0));
@@ -66,8 +66,8 @@ export class Board{
     new Knight(Colors.BLACK, this.getCell(6, 0));
     new Rook(Colors.BLACK, this.getCell(0, 0));
     new Rook(Colors.BLACK, this.getCell(7, 0));
-    for (let i = 0; i < 8; i++) {
-      new Pawn(Colors.BLACK, this.getCell(i, 1));
-    }
+    // for (let i = 0; i < 8; i++) {
+    //   new Pawn(Colors.BLACK, this.getCell(i, 1));
+    // }
   }
 }

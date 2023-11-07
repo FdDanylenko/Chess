@@ -1,6 +1,7 @@
 import { Cell } from "../Cell";
 import { Colors } from "../Colors";
-import { Piece, PiecesNames } from "./Piece";
+import { Piece } from "./Piece";
+import { PiecesNames } from './PiecesNames';
 import { Board } from "../Board";
 import whiteLogo from '../../assets/pieces-png/king-w.png';
 import blackLogo from '../../assets/pieces-png/king-b.png';
@@ -16,6 +17,26 @@ export class King extends Piece{
     this.logo = color === Colors.BLACK ? blackLogo : whiteLogo;
     this.name = PiecesNames.KING; 
   }
+
+  public isKingInCheck(): boolean {
+    const kingPosition = this.cell;
+    const board = this.cell.board;
+  
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        const cell = board.getCell(col, row);
+        if (cell.isEmpty() || cell.piece?.color === this.color) {
+          continue;
+        }
+        const opponentPiece = cell.piece;
+        if (opponentPiece?.canMove(kingPosition)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   public canMove(target: Cell): boolean {
     if(!super.canMove(target)){
       return false;
