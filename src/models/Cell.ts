@@ -10,6 +10,7 @@ export class Cell{
   piece: Piece | null;
   board: Board;
   available: boolean;
+  availableToPassant?: boolean;
   id: number;
 
   constructor(board: Board, x: number, y: number, color: Colors, piece: Piece | null){
@@ -19,6 +20,7 @@ export class Cell{
     this.piece = piece;
     this.board = board;
     this.available = false;
+    this.availableToPassant = false;
     this.id = Math.random();
   }
 

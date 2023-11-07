@@ -5,7 +5,10 @@ import { PiecesNames } from './PiecesNames';
 import whiteLogo from '../../assets/pieces-png/pawn-w.png';
 import blackLogo from '../../assets/pieces-png/pawn-b.png';
 import { King } from "./King";
-
+import { Queen } from "./Queen";
+import { Rook } from "./Rook";
+import { Bishop } from "./Bishop";
+import { Knight } from "./Knight";
 export class Pawn extends Piece{
   isFirstStep: boolean = true;
   constructor(color: Colors, cell: Cell){
@@ -30,9 +33,41 @@ export class Pawn extends Piece{
   }
   public movePiece(target: Cell): void {
     super.movePiece(target);
-    if(Math.abs(target.y-this.cell.y) == 2){
-      this.enPasantIsAvailable = true;
-    }
     this.isFirstStep = false;
+    if (this.shouldPromote(target)) {
+      this.promoteToQueen();
+    }
+  }
+  private shouldPromote(target: Cell): boolean {
+    if (this.color === Colors.BLACK && target.y === 7) {
+      return true;
+    }
+    if (this.color === Colors.WHITE && target.y === 0) {
+      return true;
+    }
+    return false;
+  }
+  private promoteToQueen(): void {
+    const queen = new Knight(this.color, this.cell);
+    this.cell.setPiece(queen);
+  }
+  public choosePromotionPiece(chosenPiece: PiecesNames): void{
+    //const selectedPiece = showPromotionDialog();
+    switch (chosenPiece) {
+      case 'Queen':
+        this.cell.setPiece(new Queen(this.color, this.cell));
+        break;
+      case 'Bishop':
+        this.cell.setPiece(new Bishop(this.color, this.cell));
+        break;
+      case 'Knight':
+        this.cell.setPiece(new Knight(this.color, this.cell));
+        break;
+      case 'Rook':
+        this.cell.setPiece(new Rook(this.color, this.cell));
+        break;
+      default:
+        this.cell.setPiece(new Knight(this.color, this.cell));
+    }
   }
 }
