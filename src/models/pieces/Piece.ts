@@ -26,10 +26,10 @@ export class Piece{
     if(target.piece?.color === this.color){
       return false;
     }
-    if(target.piece?.name === PiecesNames.KING && target.piece?.color !== this.color){
-      (target.piece as King).isCheck = true;
-      console.log("Check");
-    }
+    // if(target.piece?.name === PiecesNames.KING && target.piece?.color !== this.color){
+    //   (target.piece as King).isCheck = true;
+    //   console.log("Check");
+    // }
     return true;
   }
   public movePiece(target: Cell){
