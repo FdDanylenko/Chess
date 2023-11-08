@@ -48,7 +48,7 @@ export class Pawn extends Piece{
     return false;
   }
   private promoteToQueen(): void {
-    const queen = new Knight(this.color, this.cell);
+    const queen = new Queen(this.color, this.cell);
     this.cell.setPiece(queen);
   }
   public choosePromotionPiece(chosenPiece: PiecesNames): void{
