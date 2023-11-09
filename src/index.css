@@ -94,15 +94,15 @@ body {
 }
 .App{
   height: 98%;
-  aspect-ratio: 1/1.15;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .board{
   display: flex;
   flex-wrap: wrap;
+  margin: 15px 0
 }
 
 .cell{
@@ -158,7 +158,6 @@ body {
   }
   .App{
     width: 99%;
-    aspect-ratio: 1/1.15;
   }
   #root{
     height: 100%;
@@ -170,7 +169,6 @@ body {
 @media (min-aspect-ratio: 1/1) {
   .App{
     height: 98%;
-    aspect-ratio: 1/1.15;
   }
   #root{
     height: 100%;
