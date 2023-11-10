@@ -7,6 +7,7 @@ import { Player } from './models/Player';
 import { Colors } from './models/Colors';
 import PawnPromotionComponent from './components/PawnPromotionComponent';
 import AppContext from './models/AppContext';
+import BotInfoComponent from './components/BotInfoComponent';
 
 function App() {
   const [board, setBoard] = useState(new Board());
@@ -39,10 +40,10 @@ function App() {
 
   return (
     <div className="App">
-      <PlayerInfoComponent />
+      <BotInfoComponent board={board} currentPlayer={currentPlayer}/>
       <PawnPromotionComponent isPromotionDialogOpen={isPromotionDialogOpen} setIsPromotionDialogOpen={setIsPromotionDialogOpen} closeDialog={closePromotionDialog}/>
       <BoardComponent board={board} setBoard={setBoard} currentPlayer={currentPlayer} swapPlayer={swapPlayer}/>
-      <PlayerInfoComponent />
+      <PlayerInfoComponent board={board} currentPlayer={currentPlayer}/>
     </div>
   );
 }

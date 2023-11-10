@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import LostPieces from "./LostPieces";
 import { Board } from "../models/Board";
-import PlayerTimer from "./PlayerTimer";
 import { Player } from "../models/Player";
+import BotTimer from "./BotTimer";
 
 interface PlayerInfoComponentProps{
   board: Board;
@@ -13,13 +13,13 @@ const PlayerInfoComponent: FC<PlayerInfoComponentProps> = ({board, currentPlayer
   return(
     <div className="info-section">
           <div className="player-info">
-            <div className="player-icon"></div>
+            <div className="bot-icon"></div>
             <div className="sub-info-box">
-              <div className="player-name">Player</div>
-              <LostPieces pieces={board.blackLostPieces}/>
+              <div className="player-name">Bot</div>
+              <LostPieces pieces={board.whiteLostPieces}/>
             </div>
           </div>
-          <PlayerTimer currentPlayer={currentPlayer}/>
+          <BotTimer currentPlayer={currentPlayer}/>
         </div>
   );
 };

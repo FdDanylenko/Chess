@@ -4,7 +4,7 @@
 body {
   margin: 0;
   padding: 0;
-  max-height: 100vh;
+  height: 100vh;
   width: 100vw;
   font-family: 'Montserrat', sans-serif;
 }
@@ -28,13 +28,12 @@ body {
 .info-section{
   width: 100%;
   height: 40px;
-  overflow: hidden;
   display: flex;
   justify-content: space-between;
 }
 .player-info{
+  width: 50%;
   display: flex;
-  overflow: hidden;
 }
 .bot-icon{
   border-radius: 5px;
@@ -70,11 +69,15 @@ body {
   font-weight: 600;
   line-height: 40px;
   padding: 0px 15px;
-  width: max-content;
+  width: 70px;
   max-height: 40px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.timer span{
+.timer p{
+  display: block;
   opacity: .8;
 }
 #root{
@@ -220,4 +223,30 @@ body {
 }
 .piece-icon:hover{
   background-color: rgba(48, 46, 43, 0.719);
+}
+
+.sub-info-box{
+  width: 50%;
+}
+
+.lost-pieces{
+  width: 100%;
+  height: 20px;
+  background-color: transparent;
+  display: flex;
+  margin-left: 15px;
+}
+.lost-pieces img{
+  width: 20px;
+  height: 20px;
+}
+.pieces-box{
+  display: flex;
+  width: fit-content;
+  height: 20px;
+  background-color: transparent;
+}
+
+.pawns-box img{
+  margin-left: -10px;
 }

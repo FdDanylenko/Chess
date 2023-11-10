@@ -78,9 +78,22 @@ export class Cell{
     this.piece = piece;
     this.piece.cell = this;
   }
+
+  addLostPiece(piece: Piece){
+    if(piece.color === Colors.BLACK){
+      this.board.blackLostPieces.push(piece);
+    }
+    else{
+      this.board.whiteLostPieces.push(piece);
+    }
+  }
+
   movePiece(target: Cell){
     if(this.piece && this.piece?.canMove(target)){
       this.piece?.movePiece(target);
+      if(target.piece){
+        this.addLostPiece(target.piece);
+      }
       target.setPiece(this.piece);
       this.piece = null;
       return 1;
