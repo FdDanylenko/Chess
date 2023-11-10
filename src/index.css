@@ -6,7 +6,6 @@ body {
   padding: 0;
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -19,8 +18,6 @@ body {
   background-color: #302e2b;
 }
 .game{
-  overflow: hidden;
-  aspect-ratio: 1/1.1;
   height: 100%;
   z-index: 1;
   display: flex;
@@ -85,7 +82,6 @@ body {
   aspect-ratio: 1/1.15;
   background-color: #302e2b;
   border-radius: 5px;
-  overflow: hidden;
   z-index: 1;
   margin: 10px 0;
   display: flex;
@@ -93,7 +89,7 @@ body {
   align-items: center;
 }
 .App{
-  height: 98%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
