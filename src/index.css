@@ -19,6 +19,7 @@ body {
 }
 .game{
   height: 100%;
+  aspect-ratio: 1/1.15;
   z-index: 1;
   display: flex;
   justify-content: center;
@@ -158,8 +159,12 @@ body {
   .App{
     width: 99%;
   }
+  .game{
+    width: 100%;
+    aspect-ratio: 1/1.15;
+  }
   #root{
-    height: 100%;
+    width: 100%;
   }
   .info-section{
     height: 40px;
