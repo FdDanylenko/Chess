@@ -15,7 +15,7 @@ const PlayerInfoComponent: FC<PlayerInfoComponentProps> = ({board, currentPlayer
           <div className="player-info">
             <div className="player-icon"></div>
             <div className="sub-info-box">
-              <div className="player-name">Player</div>
+              <div className="player-name">You</div>
               <LostPieces pieces={board.blackLostPieces}/>
             </div>
           </div>

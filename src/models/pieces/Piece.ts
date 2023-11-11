@@ -33,6 +33,6 @@ export class Piece{
     return true;
   }
   public movePiece(target: Cell){
-    
+    this.cell.addMove(this.cell, target);
   }
 }

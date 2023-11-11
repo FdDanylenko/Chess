@@ -3,6 +3,7 @@ import { Piece } from "./pieces/Piece";
 import { PiecesNames } from "./pieces/PiecesNames";
 import { Board } from "./Board";
 import { King } from "./pieces/King";
+import { Bishop } from "./pieces/Bishop";
 export class Cell{
   readonly x: number;
   readonly y: number;
@@ -78,7 +79,43 @@ export class Cell{
     this.piece = piece;
     this.piece.cell = this;
   }
-
+  addMove(cell: Cell, target: Cell){
+    var letter = String.fromCharCode('A'.charCodeAt(0) + target.x);
+    if(cell.piece?.color === Colors.BLACK){
+      if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x == 2){
+        this.board.blackMoves.push('0-0');
+      }
+      else if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x < 0){
+        this.board.blackMoves.push('0-0-0');
+      }
+      else{
+        if(target.piece){
+          this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y));
+        }
+        else{
+          this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y));
+        }
+      }
+      console.log("move");
+    }
+    else if(cell.piece?.color === Colors.WHITE){
+      if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x > 1){
+        this.board.whiteMoves.push('0-0');
+      }
+      else if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x < 0){
+        this.board.whiteMoves.push('0-0-0');
+      }
+      else{
+        if(target.piece){
+          this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y));
+        }
+        else{
+          this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y));
+        }
+      }
+      console.log("move");
+    }
+  }
   addLostPiece(piece: Piece){
     if(piece.color === Colors.BLACK){
       this.board.blackLostPieces.push(piece);

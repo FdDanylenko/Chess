@@ -6,8 +6,8 @@ import { Board } from './models/Board';
 import { Player } from './models/Player';
 import { Colors } from './models/Colors';
 import PawnPromotionComponent from './components/PawnPromotionComponent';
-import AppContext from './models/AppContext';
 import BotInfoComponent from './components/BotInfoComponent';
+import HistoryComponent from './components/HistoryComponent';
 
 function App() {
   const [board, setBoard] = useState(new Board());
@@ -40,10 +40,12 @@ function App() {
 
   return (
     <div className="App">
+      <HistoryComponent moves={board.blackMoves}/>
       <BotInfoComponent board={board} currentPlayer={currentPlayer}/>
       <PawnPromotionComponent isPromotionDialogOpen={isPromotionDialogOpen} setIsPromotionDialogOpen={setIsPromotionDialogOpen} closeDialog={closePromotionDialog}/>
       <BoardComponent board={board} setBoard={setBoard} currentPlayer={currentPlayer} swapPlayer={swapPlayer}/>
       <PlayerInfoComponent board={board} currentPlayer={currentPlayer}/>
+      <HistoryComponent moves={board.whiteMoves}/>
     </div>
   );
 }

@@ -12,6 +12,8 @@ export class Board{
   cells: Cell[][] =[];
   whiteLostPieces: Piece[] = [];
   blackLostPieces: Piece[] = [];
+  whiteMoves: string[] = [];
+  blackMoves: string[] = [];
 
   public initCells(){
     for (let i = 0; i < 8; i++) {
@@ -33,6 +35,8 @@ export class Board{
     newBoard.cells = this.cells;
     newBoard.blackLostPieces = this.blackLostPieces;
     newBoard.whiteLostPieces = this.whiteLostPieces;
+    newBoard.blackMoves = this.blackMoves;
+    newBoard.whiteMoves = this.whiteMoves;
     return newBoard;
   }
 
