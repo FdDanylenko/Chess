@@ -39,7 +39,7 @@ body {
   align-items: center;
 }
 .App{
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -129,6 +129,8 @@ body {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+  }
+  .history-box{
   }
 }
 @media (min-height: 400px) {
