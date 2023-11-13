@@ -14,7 +14,7 @@ function App() {
   const [whitePlayer, setWhitePlayer] = useState(new Player(Colors.WHITE));
   const [blackPlayer, setBlackPlayer] = useState(new Player(Colors.BLACK));
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
-  const [isPromotionDialogOpen, setIsPromotionDialogOpen] = useState<true | false>(false)
+  const [isPromotionDialogOpen, setIsPromotionDialogOpen] = useState<true | false>(false);
   useEffect( () => {
     restart();
     setCurrentPlayer(whitePlayer);
@@ -37,6 +37,7 @@ function App() {
   function closePromotionDialog(){
     setIsPromotionDialogOpen(false);
   }
+  
 
   return (
     <div className="App">

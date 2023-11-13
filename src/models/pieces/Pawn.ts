@@ -31,6 +31,21 @@ export class Pawn extends Piece{
     }
     return false;
   }
+  public canMoveForProtection(target: Cell): boolean{
+    if(!super.canMoveForProtection(target)){
+      return false
+    }
+    const direction = this.cell.piece?.color === Colors.BLACK ? 1 : -1;
+    const firstStepDirection = this.cell.piece?.color === Colors.BLACK ? 2 : -2;
+
+    if((target.y === this.cell.y + direction || this.isFirstStep && (target.y === this.cell.y + firstStepDirection)) && target.x == this.cell.x && this.cell.board.getCell(target.x, target.y).isEmpty()){
+      return true;
+    }
+    if(target.y === this.cell.y + direction && (target.x === this.cell.x + 1 || target.x === this.cell.x - 1) && this.cell.isEnemy(target)) {
+      return true;
+    }
+    return false;
+  }
   public movePiece(target: Cell): void {
     super.movePiece(target);
     this.isFirstStep = false;
@@ -51,23 +66,23 @@ export class Pawn extends Piece{
     const queen = new Queen(this.color, this.cell);
     this.cell.setPiece(queen);
   }
-  public choosePromotionPiece(chosenPiece: PiecesNames): void{
-    //const selectedPiece = showPromotionDialog();
-    switch (chosenPiece) {
-      case 'Queen':
-        this.cell.setPiece(new Queen(this.color, this.cell));
-        break;
-      case 'Bishop':
-        this.cell.setPiece(new Bishop(this.color, this.cell));
-        break;
-      case 'Knight':
-        this.cell.setPiece(new Knight(this.color, this.cell));
-        break;
-      case 'Rook':
-        this.cell.setPiece(new Rook(this.color, this.cell));
-        break;
-      default:
-        this.cell.setPiece(new Knight(this.color, this.cell));
-    }
-  }
+  // public choosePromotionPiece(chosenPiece: PiecesNames): void{
+  //   //const selectedPiece = showPromotionDialog();
+  //   switch (chosenPiece) {
+  //     case 'Queen':
+  //       this.cell.setPiece(new Queen(this.color, this.cell));
+  //       break;
+  //     case 'Bishop':
+  //       this.cell.setPiece(new Bishop(this.color, this.cell));
+  //       break;
+  //     case 'Knight':
+  //       this.cell.setPiece(new Knight(this.color, this.cell));
+  //       break;
+  //     case 'Rook':
+  //       this.cell.setPiece(new Rook(this.color, this.cell));
+  //       break;
+  //     default:
+  //       this.cell.setPiece(new Knight(this.color, this.cell));
+  //   }
+  // }
 }

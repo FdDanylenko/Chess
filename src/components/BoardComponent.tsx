@@ -6,6 +6,7 @@ import userEvent from "@testing-library/user-event";
 import { Player } from "../models/Player";
 import { King } from "../models/pieces/King";
 import { PiecesNames } from "../models/pieces/PiecesNames";
+import { Colors } from "../models/Colors";
 
 interface BoardProps{
   board: Board;
@@ -16,10 +17,7 @@ interface BoardProps{
 
 const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPlayer}) => {
   const [selectedCell, setSelectedCell] = useState<Cell | null>(null);
-  const [king, setKing] = useState<Cell | null>(null);
   function click(cell: Cell){
-    if(cell.piece){
-    }
     if(selectedCell && selectedCell !== cell && selectedCell.piece?.canMove(cell)){
       selectedCell.movePiece(cell);
       setSelectedCell(null);
@@ -44,7 +42,7 @@ const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPla
     const newBoard = board.getCopyBoard();
     setBoard(newBoard);
   }
-
+  
   return(
     <div className="board">
       {board.cells.map((row, index) => 

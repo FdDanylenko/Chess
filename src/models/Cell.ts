@@ -12,6 +12,8 @@ export class Cell{
   board: Board;
   available: boolean;
   availableToPassant?: boolean;
+  isDangerousForWhite: boolean = false;
+  isDangerousForBlack: boolean = false;
   id: number;
 
   constructor(board: Board, x: number, y: number, color: Colors, piece: Piece | null){
@@ -24,7 +26,9 @@ export class Cell{
     this.availableToPassant = false;
     this.id = Math.random();
   }
-
+  public equals(otherX: number, otherY: number): boolean {
+    return this.x === otherX && this.y === otherY;
+  }
   isEmpty(){
     return this.piece === null;
   }
@@ -127,11 +131,11 @@ export class Cell{
 
   movePiece(target: Cell){
     if(this.piece && this.piece?.canMove(target)){
-      this.piece?.movePiece(target);
       if(target.piece){
         this.addLostPiece(target.piece);
       }
       target.setPiece(this.piece);
+      this.piece?.movePiece(target);
       this.piece = null;
       return 1;
     }

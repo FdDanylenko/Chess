@@ -23,4 +23,16 @@ export class Rook extends Piece{
     }
     return false;
   }
+  public canMoveForProtection(target: Cell): boolean{
+    if(!super.canMoveForProtection(target)){
+      return false
+    }
+    if(this.cell.isEmptyVertical(target)){
+      return true;
+    }
+    if(this.cell.isEmtyHorizontal(target)){
+      return true;
+    }
+    return false;
+  }
 }

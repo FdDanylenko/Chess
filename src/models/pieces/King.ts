@@ -10,6 +10,7 @@ import { Rook } from "./Rook";
 export class King extends Piece{
   isCheck: boolean = false;
   isCheckMate: boolean = false;
+  isStealMate: boolean = false;
   canCastling: boolean = true;
   hasMoved: boolean = false;
   constructor(color: Colors, cell: Cell){
@@ -18,18 +19,14 @@ export class King extends Piece{
     this.name = PiecesNames.KING; 
   }
 
-  public isKingInCheck(): boolean {
+  public isCellCheck(target: Cell): boolean {
     const kingPosition = this.cell;
     const board = this.cell.board;
   
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
-        const cell = board.getCell(col, row);
-        if (cell.isEmpty() || cell.piece?.color === this.color) {
-          continue;
-        }
-        const opponentPiece = cell.piece;
-        if (opponentPiece?.canMove(kingPosition)) {
+        const opponentPiece = board.getCell(col, row);
+        if (opponentPiece.piece && opponentPiece.piece.name !== PiecesNames.KING && opponentPiece.piece?.color !== kingPosition.piece?.color && opponentPiece.piece?.canMove(target)) {
           return true;
         }
       }
@@ -39,6 +36,12 @@ export class King extends Piece{
 
   public canMove(target: Cell): boolean {
     if(!super.canMove(target)){
+      return false;
+    }
+    if(this.isCellCheck(target)){
+      return false;
+    }
+    if (target.piece && target.piece.isProtected()) {
       return false;
     }
     if(this.canCastling == true && this.color == Colors.WHITE&& this.cell.x == 4 && this.cell.y == 7 && (target.x == 6) && this.canCastling&& this.cell.isEmtyHorizontal(target) && this.cell.board.getCell(7, 7).piece?.name == PiecesNames.ROOK && this.isCheck == false && this.cell.board.getCell(6, 7).isEmpty() && this.cell.board.getCell(5, 7).isEmpty()){
@@ -59,6 +62,12 @@ export class King extends Piece{
     const dx = Math.abs(this.cell.x - target.x);
     const dy = Math.abs(this.cell.y - target.y);
     return (dx <= 1 && dy <= 1);
+  }
+  public canMoveForProtection(target: Cell): boolean{
+    if(!super.canMoveForProtection(target)){
+      return false
+    }
+    return false;
   }
   public movePiece(target: Cell): void {
     super.movePiece(target);

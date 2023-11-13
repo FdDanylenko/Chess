@@ -22,4 +22,13 @@ export class Bishop extends Piece{
     }
     return false;
   }
+  public canMoveForProtection(target: Cell): boolean{
+    if(!super.canMoveForProtection(target)){
+      return false
+    }
+    if(this.cell.isEmptyDiagonal(target)){
+      return true;
+    }
+    return false;
+  }
 }
