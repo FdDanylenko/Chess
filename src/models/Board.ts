@@ -1,3 +1,4 @@
+import { Console } from "console";
 import { Cell } from "./Cell";
 import { Colors } from "./Colors";
 import { Bishop } from "./pieces/Bishop";
@@ -14,6 +15,9 @@ export class Board{
   blackLostPieces: Piece[] = [];
   whiteMoves: string[] = [];
   blackMoves: string[] = [];
+  public endGame: boolean = false;
+  public winner: string = "nobody";
+  public reason: string = "no reason";
 
   public initCells(){
     for (let i = 0; i < 8; i++) {
@@ -30,6 +34,16 @@ export class Board{
     }
   }
 
+  public setWinner(_winner: string, _reason: string){
+    this.endGame = true;
+    this.winner = _winner;
+    this.reason = _reason;
+    console.log(this.reason + ". " + (this.winner !== "Draw" ? this.capitalizeFirstLetter(this.winner) + " won." : this.capitalizeFirstLetter(this.winner)));
+  }
+  private capitalizeFirstLetter(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   public getCopyBoard(): Board {
     const newBoard = new Board();
     newBoard.cells = this.cells;
@@ -37,6 +51,10 @@ export class Board{
     newBoard.whiteLostPieces = this.whiteLostPieces;
     newBoard.blackMoves = this.blackMoves;
     newBoard.whiteMoves = this.whiteMoves;
+    newBoard.endGame = this.endGame;
+    newBoard.winner = this.winner;
+    newBoard.reason = this.reason;
+    //newBoard.setWinner("white", "Checkmate");
     return newBoard;
   }
 
@@ -62,26 +80,34 @@ export class Board{
   public addPieces(){
     new King(Colors.WHITE, this.getCell(4, 7));
     new Queen(Colors.WHITE, this.getCell(3, 7));
-    //new Bishop(Colors.WHITE, this.getCell(2, 7));
-    //new Bishop(Colors.WHITE, this.getCell(5, 7));
-    //new Knight(Colors.WHITE, this.getCell(1, 7));
-    //new Knight(Colors.WHITE, this.getCell(6, 7));
-    //new Rook(Colors.WHITE, this.getCell(0, 7));
-    //new Rook(Colors.WHITE, this.getCell(7, 7));
-    // for (let i = 0; i < 8; i++) {
-    //   new Pawn(Colors.WHITE, this.getCell(i, 6));
-    // }
+    new Bishop(Colors.WHITE, this.getCell(2, 7));
+    new Bishop(Colors.WHITE, this.getCell(5, 7));
+    new Knight(Colors.WHITE, this.getCell(1, 7));
+    new Knight(Colors.WHITE, this.getCell(6, 7));
+    new Rook(Colors.WHITE, this.getCell(0, 7));
+    new Rook(Colors.WHITE, this.getCell(7, 7));
+    for (let i = 0; i < 8; i++) {
+      new Pawn(Colors.WHITE, this.getCell(i, 6));
+    }
     //============================================
     new King(Colors.BLACK, this.getCell(4, 0));
-    //new Queen(Colors.BLACK, this.getCell(3, 0));
-    //new Bishop(Colors.BLACK, this.getCell(2, 0));
-    //new Bishop(Colors.BLACK, this.getCell(5, 0));
-    //new Knight(Colors.BLACK, this.getCell(1, 0));
-    //new Knight(Colors.BLACK, this.getCell(6, 0));
-    //new Rook(Colors.BLACK, this.getCell(0, 0));
-    //new Rook(Colors.BLACK, this.getCell(7, 0));
-    // for (let i = 0; i < 8; i++) {
-    //   new Pawn(Colors.BLACK, this.getCell(i, 1));
-    // }
+    new Queen(Colors.BLACK, this.getCell(3, 0));
+    new Bishop(Colors.BLACK, this.getCell(2, 0));
+    new Bishop(Colors.BLACK, this.getCell(5, 0));
+    new Knight(Colors.BLACK, this.getCell(1, 0));
+    new Knight(Colors.BLACK, this.getCell(6, 0));
+    new Rook(Colors.BLACK, this.getCell(0, 0));
+    new Rook(Colors.BLACK, this.getCell(7, 0));
+    for (let i = 0; i < 8; i++) {
+      new Pawn(Colors.BLACK, this.getCell(i, 1));
+    }
+  }
+  public addTestPieces(){
+    new King(Colors.WHITE, this.getCell(5, 2));
+    new Queen(Colors.WHITE, this.getCell(5, 1));
+    new Pawn(Colors.WHITE, this.getCell(0, 5));
+    //============================================
+    new King(Colors.BLACK, this.getCell(7, 0));
+    new Pawn(Colors.BLACK, this.getCell(0, 2));
   }
 }

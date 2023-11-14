@@ -11,7 +11,7 @@ import { Colors } from "../models/Colors";
 interface BoardProps{
   board: Board;
   setBoard: (board: Board) => void;
-  currentPlayer: Player | null;
+  currentPlayer: Player;
   swapPlayer: () => void;
 }
 
@@ -21,11 +21,30 @@ const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPla
     if(selectedCell && selectedCell !== cell && selectedCell.piece?.canMove(cell)){
       selectedCell.movePiece(cell);
       setSelectedCell(null);
+      //=====================================================================================================
+      let myKing: Cell | void = board.findKing(board, getOpociteColor(currentPlayer));
+      console.log((myKing as Cell).piece?.color + " King check " + ((myKing as Cell).piece as King).isCheck);
+      console.log("Function returns " + (cell.piece?.checkIfCheck((myKing as Cell))));
+      if(((myKing as Cell).piece as King).isCheckMate){
+        board.setWinner(currentPlayer.color, "Checkmate")
+      }
+      if(((myKing as Cell).piece as King).isStaleMate){
+        board.setWinner("Draw", "StaleMate")
+      }
+      //=====================================================================================================
       swapPlayer();
     }else{
       if(cell.piece?.color === currentPlayer?.color){
         setSelectedCell(cell);
       }
+    }
+  }
+  function getOpociteColor(currentPlayer: Player){
+    if(currentPlayer.color === Colors.BLACK){
+      return Colors.WHITE;
+    }
+    else{
+      return Colors.BLACK;
     }
   }
 

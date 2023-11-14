@@ -37,7 +37,6 @@ export class Piece{
   }
 
   public canMove(target: Cell): boolean{
-    console.log("CanMove is called");
     if(target.piece?.color === this.color){
       return false;
     }
@@ -56,35 +55,58 @@ export class Piece{
     }
     return false;
   }
-  public checkIfCheck(target: Cell): boolean {
-    console.log("CheckForCheck is called");
-    const board = target.board;
-    console.log(target.x + "; " + target.y);
-    console.log(target.piece?.name);
+  public canPieceMove(): boolean{
+    const myPiece: Cell = this.cell;
+    const board = this.cell.board;
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const targetCell = board.getCell(row, col);
-        if (target.piece && target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color) {
-          (targetCell.piece as King).isCheck = true;
-          if(!(targetCell.piece as King).canKingMove()){
-            (targetCell.piece as King).isCheckMate = true;
-            console.log("Checkmate for "  + targetCell.piece.color);
-          }
-          console.log("Check for "  + targetCell.piece.color);
-          return true;
-        }
-        else if(target.piece && !target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color){
-          (targetCell.piece as King).isCheck = false;
-          if(!(targetCell.piece as King).canKingMove()){
-            (targetCell.piece as King).isStealMate = true;
-            console.log("Stealmate");
-          }
-          console.log("No check");
+        if (myPiece.piece?.canMove(targetCell)){
           return true;
         }
       }
     }
     return false;
+  }
+  public checkIfCheck(target: Cell): boolean {
+    console.log(target.x + "; " + target.y);
+    console.log(target.piece?.name);
+    var result: boolean = false;
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        const targetCell = target.board.getCell(row, col);
+        if (target.piece && target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color) {
+          (targetCell.piece as King).isCheck = true;
+          if(!(targetCell.piece as King).canKingMove() && (targetCell.piece as King).isCheck){
+            (targetCell.piece as King).isCheckMate = true;
+            console.log("Checkmate for "  + targetCell.piece.color);
+            result = true;
+          }
+          else{
+            console.log("Check for "  + targetCell.piece.color);
+          }
+        }
+        else if(target.piece && !target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color){
+          (targetCell.piece as King).isCheck = false;
+          let otherMoves: number = 0;
+          for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+              const findOtherPiece = target.board.getCell(row, col);
+              if(findOtherPiece.piece?.canPieceMove() && findOtherPiece.piece?.color === targetCell.color){
+                otherMoves += 1;
+              }
+            }
+          }  
+          if(!(targetCell.piece as King).canKingMove() && otherMoves === 0){
+            console.log("No check");
+            (targetCell.piece as King).isStaleMate = true;
+            console.log("Stealmate");
+            result = true;
+          }
+        }
+      }
+    }
+    return result;
   }
   public findAllyKing(color: Colors): Cell{
     for (let row = 0; row < 8; row++) {
@@ -106,5 +128,6 @@ export class Piece{
   public movePiece(target: Cell){
     this.cell.addMove(this.cell, target);
     this.checkIfCheck(target);
+    this.cell.board.endGame = true;
   }
 }

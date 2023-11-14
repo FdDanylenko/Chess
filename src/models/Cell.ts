@@ -12,8 +12,6 @@ export class Cell{
   board: Board;
   available: boolean;
   availableToPassant?: boolean;
-  isDangerousForWhite: boolean = false;
-  isDangerousForBlack: boolean = false;
   id: number;
 
   constructor(board: Board, x: number, y: number, color: Colors, piece: Piece | null){

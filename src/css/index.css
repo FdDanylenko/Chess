@@ -164,6 +164,7 @@ body {
   display: flex;
   width: 100%;
   justify-content: space-between;
+  height: fit-content;
 }
 .piece-icon{
   width: 85px;

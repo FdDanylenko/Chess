@@ -10,7 +10,7 @@ import { Rook } from "./Rook";
 export class King extends Piece{
   isCheck: boolean = false;
   isCheckMate: boolean = false;
-  isStealMate: boolean = false;
+  isStaleMate: boolean = false;
   canCastling: boolean = true;
   hasMoved: boolean = false;
   constructor(color: Colors, cell: Cell){
@@ -67,7 +67,11 @@ export class King extends Piece{
     if(!super.canMoveForProtection(target)){
       return false
     }
-    return false;
+    const x = Math.abs(this.cell.x - target.x);
+    const y = Math.abs(this.cell.y - target.y);
+    const dx = Math.abs(this.cell.x - target.x);
+    const dy = Math.abs(this.cell.y - target.y);
+    return (dx <= 1 && dy <= 1);
   }
   public movePiece(target: Cell): void {
     super.movePiece(target);

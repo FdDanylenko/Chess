@@ -13,21 +13,29 @@ function App() {
   const [board, setBoard] = useState(new Board());
   const [whitePlayer, setWhitePlayer] = useState(new Player(Colors.WHITE));
   const [blackPlayer, setBlackPlayer] = useState(new Player(Colors.BLACK));
-  const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
+  const [currentPlayer, setCurrentPlayer] = useState<Player>(whitePlayer);
   const [isPromotionDialogOpen, setIsPromotionDialogOpen] = useState<true | false>(false);
   useEffect( () => {
     restart();
+    console.clear();
     setCurrentPlayer(whitePlayer);
   }, [])
 
   function restart(){
     const newBoard = new Board;
     newBoard.initCells();
-    newBoard.addPieces();
+    newBoard.addTestPieces();
     setBoard(newBoard);
   }
 
   function swapPlayer(){
+    console.log(board.endGame);
+    console.log(board.winner);
+    console.log(board.reason);
+    if(board.endGame){
+      console.log("Game is ended");
+      showPromotionDialog();
+    }
     setCurrentPlayer(currentPlayer?.color === Colors.WHITE ? blackPlayer : whitePlayer);
   }
 
