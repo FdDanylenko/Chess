@@ -26,6 +26,16 @@ function App() {
     setTimeSet(Math.random());
   }, [])
 
+  useEffect(() => {
+    const handleScrollToBottom = () => {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'auto',
+      });
+    };
+    handleScrollToBottom();
+  }, []);
+
   function restart(){
     const newBoard = new Board;
     newBoard.initCells();
