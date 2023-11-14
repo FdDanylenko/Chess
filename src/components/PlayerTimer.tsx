@@ -4,10 +4,11 @@ import { Colors } from '../models/Colors';
 
 interface PlayerTimerProps{
   currentPlayer: Player | null;
+  timeSet: number;
 }
 
-const PlayerTimer: FC<PlayerTimerProps> = ({currentPlayer}) => {
-  const [time, setTime] = useState(900);
+const PlayerTimer: FC<PlayerTimerProps> = ({currentPlayer, timeSet}) => {
+  const [time, setTime] = useState(timeSet);
   const timer = useRef<null | ReturnType<typeof setInterval>>(null);
   var seconds = Math.floor((time) % 60);
   var minutes = Math.floor((time / 60) % 60);
@@ -15,6 +16,14 @@ const PlayerTimer: FC<PlayerTimerProps> = ({currentPlayer}) => {
   useEffect(() => {
     startTimer();
   }, [currentPlayer])
+  
+  useEffect(() => {
+    restartTimer();
+  }, [timeSet])
+  
+  function restartTimer(){
+    setTime(900);
+  }
 
   function startTimer(){
     if(timer.current){

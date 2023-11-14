@@ -97,7 +97,7 @@ export class Piece{
               }
             }
           }  
-          if(!(targetCell.piece as King).canKingMove() && otherMoves === 0){
+          if(!(targetCell.piece as King).canKingMove() && otherMoves === 0 && !(targetCell.piece as King).isCheck){
             console.log("No check");
             (targetCell.piece as King).isStaleMate = true;
             console.log("Stealmate");

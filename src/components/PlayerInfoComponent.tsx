@@ -7,9 +7,10 @@ import { Player } from "../models/Player";
 interface PlayerInfoComponentProps{
   board: Board;
   currentPlayer: Player | null;
+  timeSet: number;
 }
 
-const PlayerInfoComponent: FC<PlayerInfoComponentProps> = ({board, currentPlayer}) => {
+const PlayerInfoComponent: FC<PlayerInfoComponentProps> = ({board, currentPlayer, timeSet}) => {
   return(
     <div className="info-section">
           <div className="player-info">
@@ -19,7 +20,7 @@ const PlayerInfoComponent: FC<PlayerInfoComponentProps> = ({board, currentPlayer
               <LostPieces pieces={board.blackLostPieces}/>
             </div>
           </div>
-          <PlayerTimer currentPlayer={currentPlayer}/>
+          <PlayerTimer currentPlayer={currentPlayer} timeSet={timeSet}/>
         </div>
   );
 };

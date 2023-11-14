@@ -4,6 +4,7 @@
 @import url("infoSections.css");
 @import url("historySections.css");
 @import url("promotion.css");
+@import url("gameResult.css");
 
 body {
   margin: 0;
@@ -130,8 +131,6 @@ body {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-  }
-  .history-box{
   }
 }
 @media (min-height: 400px) {

@@ -21,7 +21,6 @@ const PawnPromotionComponent: FC<PromotionDialogProps> = ({isPromotionDialogOpen
   }
 
   function selectPiece(PieceName: PiecesNames){
-
     closeDialog();
   }
   if (!isPromotionDialogOpen) {
