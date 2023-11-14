@@ -29,8 +29,8 @@ function App() {
   function restart(){
     const newBoard = new Board;
     newBoard.initCells();
-    //newBoard.addPieces();
-    newBoard.addTestPieces();
+    newBoard.addPieces();
+    //newBoard.addTestPieces();
     setBoard(newBoard);
     setTimeSet(Math.random);
   }
