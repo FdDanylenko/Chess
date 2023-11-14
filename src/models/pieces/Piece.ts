@@ -69,25 +69,21 @@ export class Piece{
     return false;
   }
   public checkIfCheck(target: Cell): boolean {
-    console.log(target.x + "; " + target.y);
-    console.log(target.piece?.name);
     var result: boolean = false;
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const targetCell = target.board.getCell(row, col);
         if (target.piece && target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color) {
           (targetCell.piece as King).isCheck = true;
+          (targetCell.piece as King).checkFromWho = target;
           if(!(targetCell.piece as King).canKingMove() && (targetCell.piece as King).isCheck){
             (targetCell.piece as King).isCheckMate = true;
-            console.log("Checkmate for "  + targetCell.piece.color);
             result = true;
-          }
-          else{
-            console.log("Check for "  + targetCell.piece.color);
           }
         }
         else if(target.piece && !target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color){
           (targetCell.piece as King).isCheck = false;
+          (targetCell.piece as King).checkFromWho = null;
           let otherMoves: number = 0;
           for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 8; col++) {
@@ -98,14 +94,35 @@ export class Piece{
             }
           }  
           if(!(targetCell.piece as King).canKingMove() && otherMoves === 0 && !(targetCell.piece as King).isCheck){
-            console.log("No check");
             (targetCell.piece as King).isStaleMate = true;
-            console.log("Stealmate");
             result = true;
           }
         }
       }
     }
+    return result;
+  }
+  public recheckIfCheck(target: Cell): boolean {
+    var result: boolean = false;
+    const enemy = this.cell;
+    if(enemy.piece === null){
+      (target.piece as King).isCheck = false;
+      return false;
+    }
+    if(enemy.piece.color === target.piece?.color){
+      (target.piece as King).isCheck = false;
+      return false;
+    }
+        if (enemy.piece && enemy.piece.canMove(target) && target.piece?.name === PiecesNames.KING && enemy.piece.color !== target.piece?.color) {
+          (target.piece as King).isCheck = true;
+          (target.piece as King).checkFromWho = enemy;
+          result = true;
+        }
+        else if(enemy.piece && !enemy.piece.canMove(target) && target.piece?.name === PiecesNames.KING && enemy.piece.color !== target.piece?.color){
+          (target.piece as King).isCheck = false;
+          (target.piece as King).checkFromWho = enemy;
+          result = false;
+        }
     return result;
   }
   public findAllyKing(color: Colors): Cell{

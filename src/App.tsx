@@ -26,16 +26,16 @@ function App() {
     setTimeSet(Math.random());
   }, [])
 
-  useEffect(() => {
-    const handleScrollToBottom = () => {
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'auto',
-      });
-      console.log("scroll");
-    };
-    handleScrollToBottom();
-  }, []);
+  // useEffect(() => {
+  //   const handleScrollToBottom = () => {
+  //     window.scrollTo({
+  //       top: document.documentElement.scrollHeight,
+  //       behavior: 'auto',
+  //     });
+  //     //console.log("scroll");
+  //   };
+  //   handleScrollToBottom();
+  // }, []);
 
   function restart(){
     const newBoard = new Board;
@@ -47,11 +47,7 @@ function App() {
   }
 
   function swapPlayer(){
-    console.log(board.endGame);
-    console.log(board.winner);
-    console.log(board.reason);
     if(board.endGame){
-      console.log("Game is ended");
       showGameResultDialog();
     }
     setCurrentPlayer(currentPlayer?.color === Colors.WHITE ? blackPlayer : whitePlayer);

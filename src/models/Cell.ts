@@ -4,6 +4,7 @@ import { PiecesNames } from "./pieces/PiecesNames";
 import { Board } from "./Board";
 import { King } from "./pieces/King";
 import { Bishop } from "./pieces/Bishop";
+import { Pawn } from "./pieces/Pawn";
 export class Cell{
   readonly x: number;
   readonly y: number;
@@ -98,7 +99,6 @@ export class Cell{
           this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y));
         }
       }
-      console.log("move");
     }
     else if(cell.piece?.color === Colors.WHITE){
       if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x > 1){
@@ -115,10 +115,17 @@ export class Cell{
           this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y));
         }
       }
-      console.log("move");
     }
   }
   addLostPiece(piece: Piece){
+    if(piece.color === Colors.BLACK){
+      this.board.blackLostPieces.slice(0, -1);
+    }
+    else{
+      this.board.whiteLostPieces.slice(0, -1);
+    }
+  }
+  removeLostPiece(piece: Piece){
     if(piece.color === Colors.BLACK){
       this.board.blackLostPieces.push(piece);
     }
@@ -132,9 +139,40 @@ export class Cell{
       if(target.piece){
         this.addLostPiece(target.piece);
       }
+      const thisPiece = this.piece;
+      const targetPiece = target.piece;
+      let wasPawnsFirstMove: boolean = false;
+      if((this.piece as Pawn)){
+        wasPawnsFirstMove = (this.piece as Pawn).isFirstStep;
+      }
       target.setPiece(this.piece);
       this.piece?.movePiece(target);
       this.piece = null;
+  
+      let myKing: Cell | void = this.board.findKing(this.board, target.piece ? target.piece?.color : Colors.SELECTED);
+      ((myKing as Cell).piece as King).checkFromWho?.piece?.recheckIfCheck((myKing as Cell));
+      for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+          const targetCell = (myKing as Cell).board.getCell(row, col);
+          if (targetCell.piece && targetCell.piece.canMove((myKing as Cell)) && (myKing as Cell).piece?.name === PiecesNames.KING && targetCell.piece.color !== (myKing as Cell).piece?.color) {
+            ((myKing as Cell).piece as King).isCheck = true;
+            ((myKing as Cell).piece as King).checkFromWho = targetCell;
+          }
+        }
+      }
+      if(((myKing as Cell).piece as King).isCheck === false || !((myKing as Cell).piece as King).checkFromWho?.piece){
+        ((myKing as Cell).piece as King).isCheck = false;
+      }
+      else{
+        this.setPiece(thisPiece);
+        target.piece?.movePiece(this);
+        target.piece = targetPiece;
+        //this.removeLostPiece(thisPiece);
+        if(this.piece && (this.piece as Pawn)){
+          (this.piece as Pawn).isFirstStep = wasPawnsFirstMove;
+        }
+        return 4;
+      }
       return 1;
     }
     return 0;

@@ -1,5 +1,5 @@
 .history-box{
-  width: calc(100%-10px);
+  max-width: calc(100%-10px);
   height: 2em;
   background-color: #262522;
   margin: 10px 0;
@@ -9,14 +9,6 @@
   color: #e9edcc;
   font-size: 1em;
   line-height: 2em;
-  overflow-y:scroll;
+  overflow:hidden;
   display: flex;
-}
-.history-box div:nth-child(2n){
-}
-.history-box-item{
-  padding: 0 5px;
-}
-.history-box-item:first-child{
-  padding: 0 5px 0 0;
 }

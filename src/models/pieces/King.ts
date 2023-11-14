@@ -12,6 +12,7 @@ export class King extends Piece{
   isCheckMate: boolean = false;
   isStaleMate: boolean = false;
   canCastling: boolean = true;
+  checkFromWho: Cell | null = null;
   hasMoved: boolean = false;
   constructor(color: Colors, cell: Cell){
     super(color, cell)

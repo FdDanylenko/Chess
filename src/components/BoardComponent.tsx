@@ -19,14 +19,24 @@ const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPla
   const [selectedCell, setSelectedCell] = useState<Cell | null>(null);
   function click(cell: Cell){
     if(selectedCell && selectedCell !== cell && selectedCell.piece?.canMove(cell)){
-      selectedCell.movePiece(cell);
+      let catchError: number = selectedCell.movePiece(cell);
+      if(catchError === 4){
+        return false;
+      }
       setSelectedCell(null);
       //=====================================================================================================
-      let myKing: Cell | void = board.findKing(board, getOpociteColor(currentPlayer));
-      console.log((myKing as Cell).piece?.color + " King check " + ((myKing as Cell).piece as King).isCheck);
-      console.log("Function returns " + (cell.piece?.checkIfCheck((myKing as Cell))));
-      if(((myKing as Cell).piece as King).isCheckMate){
+      let enemyKing: Cell | void = board.findKing(board, getOpociteColor(currentPlayer));
+      let myKing: Cell | void = board.findKing(board, currentPlayer.color);
+      //console.log((enemyKing as Cell).piece?.color + " King check " + ((enemyKing as Cell).piece as King).isCheck);
+      //console.log("Function returns " + (cell.piece?.checkIfCheck((enemyKing as Cell))));
+      if(((enemyKing as Cell).piece as King).isCheckMate){
         board.setWinner(currentPlayer.color, "Checkmate")
+      }
+      if(((myKing as Cell).piece as King).isCheckMate){
+        board.setWinner(getOpociteColor(currentPlayer), "Checkmate")
+      }
+      if(((enemyKing as Cell).piece as King).isStaleMate){
+        board.setWinner("Draw", "StaleMate")
       }
       if(((myKing as Cell).piece as King).isStaleMate){
         board.setWinner("Draw", "StaleMate")
