@@ -1,5 +1,5 @@
 .history-box{
-  max-width: calc(100%-10px);
+  width: calc(100%-10px);
   height: 2em;
   background-color: #262522;
   margin: 10px 0;
@@ -9,6 +9,6 @@
   color: #e9edcc;
   font-size: 1em;
   line-height: 2em;
-  overflow:hidden;
+  overflow: hidden; 
   display: flex;
 }
