@@ -1,0 +1,53 @@
+.promotion-dialog{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 10px;
+  z-index: 4;
+  border: solid 1px #262522;
+  border-radius: 10px;
+  background-color: rgba(48, 46, 43, 0.719);
+  color: #e9edcc;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 16px;
+  transform: translateY(-50%) translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.pieces-box{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  height: fit-content;
+}
+.piece-icon{
+  width: 85px;
+  height: 85px;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.piece-icon img{
+  width: 90%;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.piece-icon:hover{
+  background-color: rgba(48, 46, 43, 0.719);
+}
+
+@media (max-width: 580px) {
+  .piece-icon{
+    width: 45px;
+    height: 45px;
+  }
+}
