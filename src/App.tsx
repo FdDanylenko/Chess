@@ -32,6 +32,7 @@ function App() {
         top: document.documentElement.scrollHeight,
         behavior: 'auto',
       });
+      console.log("scroll");
     };
     handleScrollToBottom();
   }, []);

@@ -8,8 +8,8 @@ const HistoryComponent:FC<HistoryComponentProps> = ({moves}) => {
   return(
     <div className="history-box">
       {moves.map((move, index) =>
-          <div key={index}>
-            {move},&nbsp;
+          <div className="history-box-item" key={index}>
+            &nbsp;{move}&nbsp;
           </div>
         )}
     </div>
