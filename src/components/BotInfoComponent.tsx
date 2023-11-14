@@ -8,9 +8,10 @@ interface PlayerInfoComponentProps{
   board: Board;
   currentPlayer: Player | null;
   timeSet: number;
+  swapPlayer: () => void;
 }
 
-const PlayerInfoComponent: FC<PlayerInfoComponentProps> = ({board, currentPlayer, timeSet}) => {
+const PlayerInfoComponent: FC<PlayerInfoComponentProps> = ({board, currentPlayer, timeSet, swapPlayer}) => {
   return(
     <div className="info-section">
           <div className="player-info">
@@ -20,7 +21,7 @@ const PlayerInfoComponent: FC<PlayerInfoComponentProps> = ({board, currentPlayer
               <LostPieces pieces={board.whiteLostPieces}/>
             </div>
           </div>
-          <BotTimer currentPlayer={currentPlayer} timeSet={timeSet}/>
+          <BotTimer currentPlayer={currentPlayer} timeSet={timeSet} board={board} swapPlayer={swapPlayer}/>
         </div>
   );
 };

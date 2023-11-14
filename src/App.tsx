@@ -63,11 +63,11 @@ function App() {
   return (
     <div className="App">
       <HistoryComponent moves={board.blackMoves}/>
-      <BotInfoComponent board={board} currentPlayer={currentPlayer} timeSet={timeSet}/>
+      <BotInfoComponent board={board} currentPlayer={currentPlayer} timeSet={timeSet} swapPlayer={swapPlayer}/>
       <PawnPromotionComponent isPromotionDialogOpen={isPromotionDialogOpen} setIsPromotionDialogOpen={setIsPromotionDialogOpen} closeDialog={closePromotionDialog}/>
       <GameResult isGameResultDialogOpen={isGameResultDialogOpen} setIsGameResultDialogOpen={setIsGameResultDialogOpen} closeDialog={closeGameResultDialog} winner={board.winner} reason={board.reason} restart={restart} setCurrentPlayer={setCurrentPlayer} whitePlayer={whitePlayer} setTimeSet={setTimeSet}/>
       <BoardComponent board={board} setBoard={setBoard} currentPlayer={currentPlayer} swapPlayer={swapPlayer}/>
-      <PlayerInfoComponent board={board} currentPlayer={currentPlayer} timeSet={timeSet}/>
+      <PlayerInfoComponent board={board} currentPlayer={currentPlayer} timeSet={timeSet} swapPlayer={swapPlayer}/>
       <HistoryComponent moves={board.whiteMoves}/>
     </div>
   );

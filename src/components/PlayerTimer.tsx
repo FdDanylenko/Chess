@@ -1,13 +1,16 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { Player } from '../models/Player';
 import { Colors } from '../models/Colors';
+import { Board } from '../models/Board';
 
 interface PlayerTimerProps{
   currentPlayer: Player | null;
   timeSet: number;
+  board: Board
+  swapPlayer: () => void;
 }
 
-const PlayerTimer: FC<PlayerTimerProps> = ({currentPlayer, timeSet}) => {
+const PlayerTimer: FC<PlayerTimerProps> = ({currentPlayer, timeSet, board, swapPlayer}) => {
   const [time, setTime] = useState(timeSet);
   const timer = useRef<null | ReturnType<typeof setInterval>>(null);
   var seconds = Math.floor((time) % 60);
@@ -16,13 +19,19 @@ const PlayerTimer: FC<PlayerTimerProps> = ({currentPlayer, timeSet}) => {
   useEffect(() => {
     startTimer();
   }, [currentPlayer])
-  
+
   useEffect(() => {
     restartTimer();
   }, [timeSet])
+
+  useEffect(() => {
+    if (board.endGame) {
+      clearInterval(timer.current!);
+    }
+  }, [board.endGame]);
   
   function restartTimer(){
-    setTime(900);
+    setTime(900 );
   }
 
   function startTimer(){
@@ -34,7 +43,16 @@ const PlayerTimer: FC<PlayerTimerProps> = ({currentPlayer, timeSet}) => {
   }
 
   function decrementTimer(){
-    setTime(prev => prev-1);
+    setTime((prev) => {
+      if (prev > 0) {
+        return prev - 1;
+      } else {
+        clearInterval(timer.current!);
+        board.setWinner("Black", "time run out");
+        swapPlayer();
+        return prev;
+      }
+    });
   }
   function dontDecrementTimer(){
   }
