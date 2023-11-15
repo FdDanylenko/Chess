@@ -11,11 +11,10 @@ interface BotTimerProps{
 }
 
 const BotTimer: FC<BotTimerProps> = ({currentPlayer, timeSet, board, swapPlayer}) => {
-  const [time, setTime] = useState(timeSet);
+  const [time, setTime] = useState(900);
   const timer = useRef<null | ReturnType<typeof setInterval>>(null);
   var seconds = Math.floor((time) % 60);
   var minutes = Math.floor((time / 60) % 60);
-
   useEffect(() => {
     startTimer();
   }, [currentPlayer])

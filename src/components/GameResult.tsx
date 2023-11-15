@@ -52,7 +52,7 @@ const GameResult: FC<GameResultProps> = ({isGameResultDialogOpen, setIsGameResul
           </div>
         </div>
         <div className="buttons-box">
-          <button className="rematch-button" onClick={() => closeDialog()}>Rematch</button>
+          <button className="rematch-button" onClick={() => closeDialog()}>New game</button>
         </div>
       </div>
     );
