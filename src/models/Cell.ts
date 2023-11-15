@@ -82,7 +82,8 @@ export class Cell{
     this.piece = piece;
     this.piece.cell = this;
   }
-  addMove(cell: Cell, target: Cell){
+  addMove(cell: Cell, target: Cell, targetPiece: Piece | null){
+    console.log("addMove function")
     var letter = String.fromCharCode('A'.charCodeAt(0) + target.x);
     if(cell.piece?.color === Colors.BLACK){
       if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x == 2){
@@ -92,7 +93,8 @@ export class Cell{
         this.board.blackMoves.push('0-0-0');
       }
       else{
-        if(target.piece){
+        if(targetPiece && targetPiece !== null){
+          console.log("targetPiece: " + targetPiece)
           this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y));
         }
         else{
@@ -108,7 +110,7 @@ export class Cell{
         this.board.whiteMoves.push('0-0-0');
       }
       else{
-        if(target.piece){
+        if(targetPiece && targetPiece !== null){
           this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y));
         }
         else{
@@ -117,7 +119,7 @@ export class Cell{
       }
     }
   }
-  addLostPiece(piece: Piece){
+  removeLostPiece(piece: Piece){
     if(piece.color === Colors.BLACK){
       this.board.blackLostPieces.slice(0, -1);
     }
@@ -125,7 +127,7 @@ export class Cell{
       this.board.whiteLostPieces.slice(0, -1);
     }
   }
-  removeLostPiece(piece: Piece){
+  addLostPiece(piece: Piece){
     if(piece.color === Colors.BLACK){
       this.board.blackLostPieces.push(piece);
     }
@@ -136,17 +138,15 @@ export class Cell{
 
   movePiece(target: Cell){
     if(this.piece && this.piece?.canMove(target)){
-      if(target.piece){
-        this.addLostPiece(target.piece);
-      }
       const thisPiece = this.piece;
       const targetPiece = target.piece;
+      const targetCell = target;
       let wasPawnsFirstMove: boolean = false;
       if((this.piece as Pawn)){
         wasPawnsFirstMove = (this.piece as Pawn).isFirstStep;
       }
       target.setPiece(this.piece);
-      this.piece?.movePiece(target);
+      //this.piece?.movePiece(target);
       this.piece = null;
   
       let myKing: Cell | void = this.board.findKing(this.board, target.piece ? target.piece?.color : Colors.SELECTED);
@@ -162,10 +162,13 @@ export class Cell{
       }
       if(((myKing as Cell).piece as King).isCheck === false || !((myKing as Cell).piece as King).checkFromWho?.piece){
         ((myKing as Cell).piece as King).isCheck = false;
+        if(targetPiece){
+          this.addLostPiece(targetPiece);
+        }
       }
       else{
         this.setPiece(thisPiece);
-        target.piece?.movePiece(this);
+        //target.piece?.movePiece(this);
         target.piece = targetPiece;
         //this.removeLostPiece(thisPiece);
         if(this.piece && (this.piece as Pawn)){
@@ -173,6 +176,10 @@ export class Cell{
         }
         return 4;
       }
+      this.piece = thisPiece;
+      this.addMove(this, target, targetPiece ? targetPiece : null);
+      this.piece = null;
+      target.piece?.movePiece(target);
       return 1;
     }
     return 0;
