@@ -116,11 +116,27 @@ export class Piece{
         if (enemy.piece && enemy.piece.canMove(target) && target.piece?.name === PiecesNames.KING && enemy.piece.color !== target.piece?.color) {
           (target.piece as King).isCheck = true;
           (target.piece as King).checkFromWho = enemy;
+          if(!(target.piece as King).canKingMove() && (target.piece as King).isCheck){
+            (target.piece as King).isCheckMate = true;
+          }
           result = true;
         }
         else if(enemy.piece && !enemy.piece.canMove(target) && target.piece?.name === PiecesNames.KING && enemy.piece.color !== target.piece?.color){
           (target.piece as King).isCheck = false;
           (target.piece as King).checkFromWho = enemy;
+          let otherMoves: number = 0;
+          for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+              const findOtherPiece = target.board.getCell(row, col);
+              if(findOtherPiece.piece?.canPieceMove() && findOtherPiece.piece?.color === target.color){
+                otherMoves += 1;
+              }
+            }
+          }  
+          if(!(target.piece as King).canKingMove() && otherMoves === 0 && !(target.piece as King).isCheck){
+            (target.piece as King).isStaleMate = true;
+            result = true;
+          }
           result = false;
         }
     return result;

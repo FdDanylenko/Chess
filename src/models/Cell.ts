@@ -82,39 +82,39 @@ export class Cell{
     this.piece = piece;
     this.piece.cell = this;
   }
-  addMove(cell: Cell, target: Cell, targetPiece: Piece | null){
+  addMove(cell: Cell, target: Cell, targetPiece: Piece | null, additioanlInfo: string){
     console.log("addMove function")
     var letter = String.fromCharCode('A'.charCodeAt(0) + target.x);
     if(cell.piece?.color === Colors.BLACK){
       if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x == 2){
-        this.board.blackMoves.push('0-0');
+        this.board.blackMoves.push('0-0' + additioanlInfo);
       }
       else if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x < 0){
-        this.board.blackMoves.push('0-0-0');
+        this.board.blackMoves.push('0-0-0' + additioanlInfo);
       }
       else{
         if(targetPiece && targetPiece !== null){
           console.log("targetPiece: " + targetPiece)
-          this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y));
+          this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y) + additioanlInfo);
         }
         else{
-          this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y));
+          this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y) + additioanlInfo);
         }
       }
     }
     else if(cell.piece?.color === Colors.WHITE){
       if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x > 1){
-        this.board.whiteMoves.push('0-0');
+        this.board.whiteMoves.push('0-0' + additioanlInfo);
       }
       else if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x < 0){
-        this.board.whiteMoves.push('0-0-0');
+        this.board.whiteMoves.push('0-0-0' + additioanlInfo);
       }
       else{
         if(targetPiece && targetPiece !== null){
-          this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y));
+          this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y) + additioanlInfo);
         }
         else{
-          this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y));
+          this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y) + additioanlInfo);
         }
       }
     }
@@ -141,6 +141,7 @@ export class Cell{
       const thisPiece = this.piece;
       const targetPiece = target.piece;
       const targetCell = target;
+      let additioanlInfo: string = "";
       let wasPawnsFirstMove: boolean = false;
       if((this.piece as Pawn)){
         wasPawnsFirstMove = (this.piece as Pawn).isFirstStep;
@@ -177,7 +178,16 @@ export class Cell{
         return 4;
       }
       this.piece = thisPiece;
-      this.addMove(this, target, targetPiece ? targetPiece : null);
+      let enemyKing: Cell | void = this.board.findKing(this.board, (thisPiece.color === Colors.WHITE ? Colors.BLACK : Colors.WHITE));
+      this.piece?.recheckIfCheck((enemyKing as Cell));
+      if(((enemyKing as Cell).piece as King).isCheck){
+        additioanlInfo = "+";
+      }
+      if(((enemyKing as Cell).piece as King).isCheckMate){
+        additioanlInfo = "#";
+      }
+      console.log("AdditionalInfo: " + additioanlInfo)
+      this.addMove(this, target, targetPiece ? targetPiece : null, additioanlInfo);
       this.piece = null;
       target.piece?.movePiece(target);
       return 1;

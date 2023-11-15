@@ -109,6 +109,6 @@ export class Board{
     //============================================
     new King(Colors.BLACK, this.getCell(7, 0));
     new Pawn(Colors.BLACK, this.getCell(0, 2));
-    new Pawn(Colors.BLACK, this.getCell(6, 0));
+    //new Pawn(Colors.BLACK, this.getCell(6, 0));
   }
 }
