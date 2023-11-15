@@ -45,6 +45,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-content: flex-start;
 }
 .board{
   display: flex;

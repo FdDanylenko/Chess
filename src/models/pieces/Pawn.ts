@@ -48,6 +48,20 @@ export class Pawn extends Piece{
   }
   public movePiece(target: Cell): void {
     super.movePiece(target);
+    const abs = Math.abs(this.cell.y - target.y);
+    console.log("target: " + target.y + ", " + "cell: " + this.cell.y);
+    console.log(abs);
+    if(abs === 2 && this.cell.piece?.name === PiecesNames.PAWN){
+      console.log("Pasant check");
+      if(target.piece?.color === Colors.WHITE){
+        this.cell.board.getCell(target.x, target.y+1).availableToPassant = true;
+        console.log("Pasant:" + this.cell.board.getCell(target.x, target.y+1).availableToPassant)
+      }
+      if(target.piece?.color === Colors.BLACK){
+        this.cell.board.getCell(target.x, target.y-1)
+        console.log("Pasant:" + this.cell.board.getCell(target.x, target.y-1).availableToPassant)
+      }
+    }
     this.isFirstStep = false;
     if (this.shouldPromote(target)) {
       this.promoteToQueen();

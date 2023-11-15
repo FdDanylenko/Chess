@@ -12,7 +12,7 @@ export class Cell{
   piece: Piece | null;
   board: Board;
   available: boolean;
-  availableToPassant?: boolean;
+  availableToPassant: boolean = false;
   id: number;
 
   constructor(board: Board, x: number, y: number, color: Colors, piece: Piece | null){
@@ -22,7 +22,6 @@ export class Cell{
     this.piece = piece;
     this.board = board;
     this.available = false;
-    this.availableToPassant = false;
     this.id = Math.random();
   }
   public equals(otherX: number, otherY: number): boolean {
@@ -139,10 +138,12 @@ export class Cell{
   movePiece(target: Cell){
     if(this.piece && this.piece?.canMove(target)){
       const thisPiece = this.piece;
+      const thisCell = this;
       const targetPiece = target.piece;
       const targetCell = target;
       let additioanlInfo: string = "";
       let wasPawnsFirstMove: boolean = false;
+      this.piece.movePiece(target);
       if((this.piece as Pawn)){
         wasPawnsFirstMove = (this.piece as Pawn).isFirstStep;
       }
@@ -188,8 +189,8 @@ export class Cell{
       }
       console.log("AdditionalInfo: " + additioanlInfo)
       this.addMove(this, target, targetPiece ? targetPiece : null, additioanlInfo);
+      //this.piece.movePiece(target);
       this.piece = null;
-      target.piece?.movePiece(target);
       return 1;
     }
     return 0;

@@ -116,6 +116,7 @@ export class Piece{
         if (enemy.piece && enemy.piece.canMove(target) && target.piece?.name === PiecesNames.KING && enemy.piece.color !== target.piece?.color) {
           (target.piece as King).isCheck = true;
           (target.piece as King).checkFromWho = enemy;
+          let otherMoves: number = 0;
           if(!(target.piece as King).canKingMove() && (target.piece as King).isCheck){
             (target.piece as King).isCheckMate = true;
           }
