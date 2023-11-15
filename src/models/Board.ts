@@ -16,7 +16,7 @@ export class Board{
   whiteMoves: string[] = [];
   blackMoves: string[] = [];
   public endGame: boolean = false;
-  public winner: string = "white";
+  public winner: string = "black";
   public reason: string = "time run out";
 
   public initCells(){
