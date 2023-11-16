@@ -1,6 +1,7 @@
 import React, {FC} from "react";
 import { Cell } from "../models/Cell";
 import { Colors } from "../models/Colors";
+import { King } from "../models/pieces/King";
 
 interface CellProps{
   cell: Cell;
@@ -16,7 +17,10 @@ const CellComponent: FC<CellProps> = ({cell, selected, click}) => {
     >
       {cell.available && !cell.piece && <div className="available"></div>}
       {cell.available && cell.piece && <div className="availableToTake"></div>}
-      {cell.piece?.logo && <img src={cell.piece.logo}></img>}
+      {cell.availableToPassant && <div className="enPassant"></div>}
+      {(cell.piece as King)?.isCheckMate && <div className="toWhoCheckmate"></div>}
+      {(cell.piece as King)?.isCheck && <div className="toWhoCheck"></div>}
+      {cell.piece?.logo && <img alt="Cell" src={cell.piece.logo}></img>}
     </div>
   );
 };

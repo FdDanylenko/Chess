@@ -18,6 +18,7 @@ export class Board{
   public endGame: boolean = false;
   public winner: string = "black";
   public reason: string = "time run out";
+  public previousPasant: Cell | null = null;
 
   public initCells(){
     for (let i = 0; i < 8; i++) {

@@ -9,6 +9,7 @@ import PawnPromotionComponent from './components/PawnPromotionComponent';
 import BotInfoComponent from './components/BotInfoComponent';
 import HistoryComponent from './components/HistoryComponent';
 import GameResult from './components/GameResult';
+import BoardTestingInfo from './components/BoardTestingInfo';
 
 function App() {
   const [board, setBoard] = useState(new Board());
@@ -18,7 +19,6 @@ function App() {
   const [timeSet, setTimeSet] = useState<number>(900)
   const [isPromotionDialogOpen, setIsPromotionDialogOpen] = useState<true | false>(false);
   const [isGameResultDialogOpen, setIsGameResultDialogOpen] = useState<true | false>(false);
-  //const [kostyl, setKostyl] = useState<number>(1);
   useEffect( () => {
     restart();
     console.clear();
@@ -75,6 +75,7 @@ function App() {
       <PawnPromotionComponent isPromotionDialogOpen={isPromotionDialogOpen} setIsPromotionDialogOpen={setIsPromotionDialogOpen} closeDialog={closePromotionDialog}/>
       <GameResult isGameResultDialogOpen={isGameResultDialogOpen} setIsGameResultDialogOpen={setIsGameResultDialogOpen} closeDialog={closeGameResultDialog} winner={board.winner} reason={board.reason} restart={restart} setCurrentPlayer={setCurrentPlayer} whitePlayer={whitePlayer} setTimeSet={setTimeSet}/>
       <BoardComponent board={board} setBoard={setBoard} currentPlayer={currentPlayer} swapPlayer={swapPlayer}/>
+      <BoardTestingInfo board={board} setBoard={setBoard} currentPlayer={currentPlayer} swapPlayer={swapPlayer}/>
       <PlayerInfoComponent board={board} currentPlayer={currentPlayer} timeSet={timeSet} swapPlayer={swapPlayer}/>
       <HistoryComponent moves={board.whiteMoves}/>
     </div>

@@ -11,6 +11,7 @@ import { Bishop } from "./Bishop";
 import { Knight } from "./Knight";
 export class Pawn extends Piece{
   isFirstStep: boolean = true;
+  justPassanted: boolean = false;
   constructor(color: Colors, cell: Cell){
     super(color, cell)
     this.logo = color === Colors.BLACK ? blackLogo : whiteLogo;
@@ -26,7 +27,7 @@ export class Pawn extends Piece{
     if((target.y === this.cell.y + direction || this.isFirstStep && (target.y === this.cell.y + firstStepDirection)) && target.x == this.cell.x && this.cell.board.getCell(target.x, target.y).isEmpty()){
       return true;
     }
-    if(target.y === this.cell.y + direction && (target.x === this.cell.x + 1 || target.x === this.cell.x - 1) && this.cell.isEnemy(target)) {
+    if(target.y === this.cell.y + direction && (target.x === this.cell.x + 1 || target.x === this.cell.x - 1) && (this.cell.isEnemy(target) || target.availableToPassant)) {
       return true;
     }
     return false;
@@ -41,40 +42,36 @@ export class Pawn extends Piece{
     if((target.y === this.cell.y + direction || this.isFirstStep && (target.y === this.cell.y + firstStepDirection)) && target.x == this.cell.x && this.cell.board.getCell(target.x, target.y).isEmpty()){
       return true;
     }
-    if(target.y === this.cell.y + direction && (target.x === this.cell.x + 1 || target.x === this.cell.x - 1) && this.cell.isEnemy(target)) {
+    if(target.y === this.cell.y + direction && (target.x === this.cell.x + 1 || target.x === this.cell.x - 1) && (this.cell.isEnemy(target) || target.availableToPassant)) {
       return true;
     }
     return false;
   }
   public movePiece(target: Cell): void {
+    if(target.availableToPassant){
+      const opositeDirection = this.cell.piece?.color === Colors.BLACK ? -1 : 1;
+      console.log("Cell behind: " + (target.x) + " " + (target.y + opositeDirection));
+      target.board.getCell(target.x, (target.y + opositeDirection)).piece = null;
+    }
     super.movePiece(target);
     const abs = Math.abs(this.cell.y - target.y);
-    console.log("target: " + target.y + ", " + "cell: " + this.cell.y);
-    console.log(abs);
     if(abs === 2 && this.cell.piece?.name === PiecesNames.PAWN){
-      console.log("Pasant check");
-      if(target.piece?.color === Colors.WHITE){
+      if(this.color === Colors.WHITE){
         this.cell.board.getCell(target.x, target.y+1).availableToPassant = true;
-        console.log("Pasant:" + this.cell.board.getCell(target.x, target.y+1).availableToPassant)
+        console.log("Pasant:" + this.cell.board.getCell(target.x, target.y+1).availableToPassant + " " + target.x + " " + (target.y + 1))
       }
-      if(target.piece?.color === Colors.BLACK){
-        this.cell.board.getCell(target.x, target.y-1)
-        console.log("Pasant:" + this.cell.board.getCell(target.x, target.y-1).availableToPassant)
+      if(this.color === Colors.BLACK){
+        this.cell.board.getCell(target.x, target.y-1).availableToPassant = true;
+        console.log("Pasant:" + this.cell.board.getCell(target.x, target.y-1).availableToPassant + " " + target.x + " " + (target.y -  1))
       }
     }
-    this.isFirstStep = false;
+    //this.isFirstStep = false;
     if (this.shouldPromote(target)) {
       this.promoteToQueen();
     }
   }
-  private shouldPromote(target: Cell): boolean {
-    if (this.color === Colors.BLACK && target.y === 7) {
-      return true;
-    }
-    if (this.color === Colors.WHITE && target.y === 0) {
-      return true;
-    }
-    return false;
+  public shouldPromote(target: Cell): boolean {
+    return (this.color === Colors.BLACK && target.y === 7) || (this.color === Colors.WHITE && target.y === 0);
   }
   private promoteToQueen(): void {
     const queen = new Queen(this.color, this.cell);

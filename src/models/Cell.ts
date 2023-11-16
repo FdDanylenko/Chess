@@ -77,43 +77,44 @@ export class Cell{
     }
     return true;
   }
-  setPiece(piece: Piece){
-    this.piece = piece;
-    this.piece.cell = this;
+  setPiece(piece: Piece | null){
+    if(piece !== null){
+      this.piece = piece;
+      this.piece.cell = this;
+    }
   }
-  addMove(cell: Cell, target: Cell, targetPiece: Piece | null, additioanlInfo: string){
-    console.log("addMove function")
+  addMove(cell: Cell, target: Cell, targetPiece: Piece | null, additioanlInfo: string, addLostPiece: boolean){
+    console.log(addLostPiece);
     var letter = String.fromCharCode('A'.charCodeAt(0) + target.x);
     if(cell.piece?.color === Colors.BLACK){
-      if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x == 2){
+      if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x === 2){
         this.board.blackMoves.push('0-0' + additioanlInfo);
       }
-      else if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x < 0){
+      else if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x === -2){
         this.board.blackMoves.push('0-0-0' + additioanlInfo);
       }
       else{
-        if(targetPiece && targetPiece !== null){
-          console.log("targetPiece: " + targetPiece)
-          this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y) + additioanlInfo);
+        if((targetPiece && targetPiece !== null || addLostPiece)){
+          this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : cell.x!==target.x ? String.fromCharCode('A'.charCodeAt(0) + cell.x).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y) + additioanlInfo);
         }
         else{
-          this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y) + additioanlInfo);
+          this.board.blackMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : cell.x!==target.x ? String.fromCharCode('A'.charCodeAt(0) + cell.x).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y) + additioanlInfo);
         }
       }
     }
     else if(cell.piece?.color === Colors.WHITE){
-      if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x > 1){
+      if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x === 2){
         this.board.whiteMoves.push('0-0' + additioanlInfo);
       }
-      else if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x < 0){
+      else if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x === -2){
         this.board.whiteMoves.push('0-0-0' + additioanlInfo);
       }
       else{
-        if(targetPiece && targetPiece !== null){
-          this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y) + additioanlInfo);
+        if((targetPiece && targetPiece !== null) || addLostPiece){
+          this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : cell.x!==target.x ? String.fromCharCode('A'.charCodeAt(0) + cell.x).toLowerCase() : '')) + "x" + letter.toLowerCase() + (8-target.y) + additioanlInfo);
         }
         else{
-          this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y) + additioanlInfo);
+          this.board.whiteMoves.push((cell.piece.name.charAt(1) === 'n' ? 'n' : (cell.piece.name.charAt(0) !== 'P' ? cell.piece.name.charAt(0).toLowerCase() : cell.x!==target.x ? String.fromCharCode('A'.charCodeAt(0) + cell.x).toLowerCase() : '')) + letter.toLowerCase() + (8-target.y) + additioanlInfo);
         }
       }
     }
@@ -136,11 +137,27 @@ export class Cell{
   }
 
   movePiece(target: Cell){
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        const foundedCell = target.board.getCell(row, col);
+        //foundedCell.availableToPassant = false;
+        if(foundedCell.availableToPassant){
+          this.board.previousPasant = foundedCell;
+        }
+      }
+    }
     if(this.piece && this.piece?.canMove(target)){
       const thisPiece = this.piece;
       const thisCell = this;
+      let opositeDirection = 0;
+      let pieceBehind = null;
+      if(thisPiece instanceof Pawn){
+        opositeDirection = thisPiece.color === Colors.BLACK ? -1 : 1;
+        pieceBehind = target.board.getCell(target.x, (target.y + opositeDirection)).piece; 
+      } 
       const targetPiece = target.piece;
       const targetCell = target;
+      let addLostPiece: boolean = false;
       let additioanlInfo: string = "";
       let wasPawnsFirstMove: boolean = false;
       this.piece.movePiece(target);
@@ -148,7 +165,6 @@ export class Cell{
         wasPawnsFirstMove = (this.piece as Pawn).isFirstStep;
       }
       target.setPiece(this.piece);
-      //this.piece?.movePiece(target);
       this.piece = null;
   
       let myKing: Cell | void = this.board.findKing(this.board, target.piece ? target.piece?.color : Colors.SELECTED);
@@ -167,12 +183,21 @@ export class Cell{
         if(targetPiece){
           this.addLostPiece(targetPiece);
         }
+        if(target.availableToPassant){
+          this.addLostPiece(pieceBehind ? pieceBehind : thisPiece);
+          addLostPiece = true;
+        }
+        if(this.piece && (this.piece as Pawn)){
+          (this.piece as Pawn).isFirstStep = !wasPawnsFirstMove;
+          //(this.piece as Pawn).isFirstStep = false;
+        }
+        let foundedCell: Cell | null = this.board.getCell(this.board.previousPasant?.x ? this.board.previousPasant?.x : 0, this.board.previousPasant?.y ? this.board.previousPasant?.y : 0);
+        this.board.previousPasant = null;
+        (foundedCell as Cell).availableToPassant = false;
       }
       else{
         this.setPiece(thisPiece);
-        //target.piece?.movePiece(this);
         target.piece = targetPiece;
-        //this.removeLostPiece(thisPiece);
         if(this.piece && (this.piece as Pawn)){
           (this.piece as Pawn).isFirstStep = wasPawnsFirstMove;
         }
@@ -181,15 +206,18 @@ export class Cell{
       this.piece = thisPiece;
       let enemyKing: Cell | void = this.board.findKing(this.board, (thisPiece.color === Colors.WHITE ? Colors.BLACK : Colors.WHITE));
       this.piece?.recheckIfCheck((enemyKing as Cell));
+      if(thisPiece instanceof Pawn && target.y ===  (thisPiece.color === Colors.WHITE ? 0 : 7)){
+        additioanlInfo += "Q";
+      }
       if(((enemyKing as Cell).piece as King).isCheck){
-        additioanlInfo = "+";
+        additioanlInfo += "+";
       }
       if(((enemyKing as Cell).piece as King).isCheckMate){
-        additioanlInfo = "#";
+        additioanlInfo += "#";
       }
-      console.log("AdditionalInfo: " + additioanlInfo)
-      this.addMove(this, target, targetPiece ? targetPiece : null, additioanlInfo);
-      //this.piece.movePiece(target);
+      (this.piece as Pawn).isFirstStep = false;
+      console.log(addLostPiece);
+      this.addMove(this, target, targetPiece ? targetPiece : null, additioanlInfo, addLostPiece);
       this.piece = null;
       return 1;
     }

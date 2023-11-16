@@ -7,6 +7,7 @@ import { Player } from "../models/Player";
 import { King } from "../models/pieces/King";
 import { PiecesNames } from "../models/pieces/PiecesNames";
 import { Colors } from "../models/Colors";
+
 interface BoardProps{
   board: Board;
   setBoard: (board: Board) => void;
@@ -14,29 +15,25 @@ interface BoardProps{
   swapPlayer: () => void;
 }
 
-const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPlayer}) => {
-  let moveSound = require('./../assets/move-self.mp3');
-  let captureSound = require('./../assets/capture.mp3');
-  function PlaySound(sound: any){
-    new Audio(sound).play();
-  }
+const BoardTestingInfo: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPlayer}) => {
   const [selectedCell, setSelectedCell] = useState<Cell | null>(null);
   function click(cell: Cell){
     if(selectedCell && selectedCell !== cell && selectedCell.piece?.canMove(cell)){
-      cell.piece ? PlaySound(captureSound) : PlaySound(moveSound);
       let catchError: number = selectedCell.movePiece(cell);
       if(catchError === 4){
         return false;
       }
       setSelectedCell(null);
       //=====================================================================================================
-      let enemyKing: Cell | void = board.findKing(board, getOppociteColor(currentPlayer));
+      let enemyKing: Cell | void = board.findKing(board, getOpociteColor(currentPlayer));
       let myKing: Cell | void = board.findKing(board, currentPlayer.color);
+      //console.log((enemyKing as Cell).piece?.color + " King check " + ((enemyKing as Cell).piece as King).isCheck);
+      //console.log("Function returns " + (cell.piece?.checkIfCheck((enemyKing as Cell))));
       if(((enemyKing as Cell).piece as King).isCheckMate){
         board.setWinner(currentPlayer.color, "Checkmate")
       }
       if(((myKing as Cell).piece as King).isCheckMate){
-        board.setWinner(getOppociteColor(currentPlayer), "Checkmate")
+        board.setWinner(getOpociteColor(currentPlayer), "Checkmate")
       }
       if(((enemyKing as Cell).piece as King).isStaleMate){
         board.setWinner("Draw", "StaleMate")
@@ -52,7 +49,7 @@ const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPla
       }
     }
   }
-  function getOppociteColor(currentPlayer: Player){
+  function getOpociteColor(currentPlayer: Player){
     if(currentPlayer.color === Colors.BLACK){
       return Colors.WHITE;
     }
@@ -76,7 +73,7 @@ const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPla
   }
   
   return(
-    <div className="board">
+    <div className="board test">
       {board.cells.map((row, index) => 
         <React.Fragment key={index}>
           {row.map(cell => 
@@ -89,4 +86,4 @@ const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPla
   );
 };
 
-export default BoardComponent;
+export default BoardTestingInfo;

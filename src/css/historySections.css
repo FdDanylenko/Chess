@@ -1,4 +1,6 @@
 .history-box{
+  display: flex;
+  overflow-y: hidden;
   width: calc(100%-10px);
   height: 2em;
   background-color: #262522;
@@ -9,6 +11,7 @@
   color: #e9edcc;
   font-size: 1em;
   line-height: 2em;
-  overflow: hidden; 
-  display: flex;
+}
+.history-box::-webkit-scrollbar {
+  display: none;
 }

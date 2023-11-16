@@ -5,6 +5,7 @@
 @import url("historySections.css");
 @import url("promotion.css");
 @import url("gameResult.css");
+@import url("boardTestInfo.css");
 
 body {
   margin: 0;
@@ -41,6 +42,7 @@ body {
   align-items: center;
 }
 .App{
+  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -52,6 +54,7 @@ body {
   flex-wrap: wrap;
   margin: 15px 0
 }
+
 .cell{
   aspect-ratio: 1 / 1;
   position: relative;

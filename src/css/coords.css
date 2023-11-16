@@ -16,6 +16,15 @@
   font-size: 1em;
   z-index: 0;
 }
+.cell:nth-last-child(-n+8)::after{
+  content: "";
+  position: absolute;
+  color: #e9edcc;
+  bottom: 1px;
+  right: 3px;
+  font-size: 1em;
+  z-index: 0; 
+}
 .cell:nth-child(1)::before{
   content: "8";
 }
@@ -39,18 +48,6 @@
 }
 .cell:nth-child(57)::before{
   content: "1";
-}
-
-
-
-.cell:nth-last-child(-n+8)::after{
-  content: "";
-  position: absolute;
-  color: #e9edcc;
-  bottom: 1px;
-  right: 3px;
-  font-size: 1em;
-  z-index: 0; 
 }
 .cell:nth-last-child(1)::after{
   content: 'h';
