@@ -5,6 +5,7 @@ import { Board } from "./Board";
 import { King } from "./pieces/King";
 import { Bishop } from "./pieces/Bishop";
 import { Pawn } from "./pieces/Pawn";
+import { PieceFactory } from "./pieces/PieceFactory";
 export class Cell{
   readonly x: number;
   readonly y: number;
@@ -136,6 +137,10 @@ export class Cell{
     }
   }
 
+  moveThatFit(target: Cell){
+    
+  }
+
   movePiece(target: Cell){
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
@@ -209,14 +214,17 @@ export class Cell{
       if(thisPiece instanceof Pawn && target.y ===  (thisPiece.color === Colors.WHITE ? 0 : 7)){
         additioanlInfo += "Q";
       }
-      if(((enemyKing as Cell).piece as King).isCheck){
-        additioanlInfo += "+";
+      if(((enemyKing as Cell).piece as King).isCheck || ((enemyKing as Cell).piece as King).isCheckMate){
+        if(((enemyKing as Cell).piece as King).isCheck){
+          additioanlInfo += "+";
+        }
+        else{
+          additioanlInfo += "#";
+        }
       }
-      if(((enemyKing as Cell).piece as King).isCheckMate){
-        additioanlInfo += "#";
+      if(this.piece?.name === PiecesNames.PAWN){
+        (this.piece as Pawn).isFirstStep = false;
       }
-      (this.piece as Pawn).isFirstStep = false;
-      console.log(addLostPiece);
       this.addMove(this, target, targetPiece ? targetPiece : null, additioanlInfo, addLostPiece);
       this.piece = null;
       return 1;

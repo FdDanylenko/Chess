@@ -6,6 +6,7 @@ import { Board } from "../Board";
 import whiteLogo from '../../assets/pieces-png/king-w.png';
 import blackLogo from '../../assets/pieces-png/king-b.png';
 import { Rook } from "./Rook";
+import { Pawn } from "./Pawn";
 
 export class King extends Piece{
   isCheck: boolean = false;
@@ -27,7 +28,7 @@ export class King extends Piece{
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const opponentPiece = board.getCell(col, row);
-        if (opponentPiece.piece && opponentPiece.piece.name !== PiecesNames.KING && opponentPiece.piece?.color !== kingPosition.piece?.color && opponentPiece.piece?.canMove(target)) {
+        if (opponentPiece.piece && opponentPiece.piece.name !== PiecesNames.KING && opponentPiece.piece?.color !== kingPosition.piece?.color && (opponentPiece.piece.name !== PiecesNames.PAWN && opponentPiece.piece?.canMove(target))) {
           return true;
         }
       }

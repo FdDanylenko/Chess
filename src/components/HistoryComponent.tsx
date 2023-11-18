@@ -5,6 +5,13 @@ interface HistoryComponentProps{
 }
 
 const HistoryComponent:FC<HistoryComponentProps> = ({moves}) => {
+  // function updateScroll(){
+  //   var element = document.getElementById("history-box");
+  //   if(element !== null){
+  //     element.scrollLeft = 1900;
+  //   }
+  // }
+  //moves = ["fdf", "erhrtj", "Ehrth", "fdf", "erhrtj", "Ehrth", "fdf", "erhrtj", "Ehrth", "fdf", "erhrtj", "Ehrth", "fdf", "erhrtj", "Ehrth", "fdf", "erhrtj", "Ehrth", "fdf", "erhrtj", "Ehrth", "fdf", "erhrtj", "Ehrth", "fdf", "erhrtj", "Ehrth", "fdf", "erhrtj", "Ehrth"]
   return(
     <div className="history-box">
       {moves.map((move, index) =>

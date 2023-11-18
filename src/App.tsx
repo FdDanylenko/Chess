@@ -42,6 +42,7 @@ function App() {
     newBoard.initCells();
     newBoard.addPieces();
     //newBoard.addTestPieces();
+    //newBoard.addTes2tPieces();
     setBoard(newBoard);
     setTimeSet(Math.random);
   }
@@ -65,8 +66,6 @@ function App() {
   function closeGameResultDialog(){
     setIsGameResultDialogOpen(false);
   }
-  //<HistoryComponent moves={board.blackMoves}/>
-  //<HistoryComponent moves={board.whiteMoves}/>
 
   return (
     <div className="App">

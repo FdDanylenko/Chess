@@ -27,8 +27,6 @@ const BoardTestingInfo: FC<BoardProps> = ({board, setBoard, currentPlayer, swapP
       //=====================================================================================================
       let enemyKing: Cell | void = board.findKing(board, getOpociteColor(currentPlayer));
       let myKing: Cell | void = board.findKing(board, currentPlayer.color);
-      //console.log((enemyKing as Cell).piece?.color + " King check " + ((enemyKing as Cell).piece as King).isCheck);
-      //console.log("Function returns " + (cell.piece?.checkIfCheck((enemyKing as Cell))));
       if(((enemyKing as Cell).piece as King).isCheckMate){
         board.setWinner(currentPlayer.color, "Checkmate")
       }

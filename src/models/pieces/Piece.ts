@@ -68,20 +68,63 @@ export class Piece{
     }
     return false;
   }
+
+  // Функція отримує короля і загрозу для нього, шукає союзну фігуру короля і клітинку в яку
+  // б вона могла похрдити щоб при повторній перевірці шаху загроза шаху переставала існувати
+  public tryFindSaveMove(threatCell: Cell, thisKingCell: Cell):boolean{
+    console.log("+")
+    let savedThreatCell = threatCell;
+    let result: boolean = false;  
+
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        //Вибір координат фігури
+        let savePossiblePieceToMove: Cell = thisKingCell.board.getCell(row, col);
+        let savePossiblePieceToMovePiece = thisKingCell.board.getCell(row, col).piece;
+        //Перевірка чи є вона союзною
+        if(thisKingCell.board.getCell(row, col).piece && thisKingCell.board.getCell(row, col).piece?.color === thisKingCell.piece?.color && thisKingCell.board.getCell(row, col).piece?.name !== PiecesNames.KING){
+              console.log(thisKingCell.board.getCell(row, col).piece?.name + " " + thisKingCell.board.getCell(row, col).piece?.canMove(savedThreatCell))
+              console.log("threatCell: " + threatCell.piece?.name);
+              if(thisKingCell.board.getCell(row, col).piece?.canMove(savedThreatCell)){
+                result = true;
+                return result;
+              }
+          for (let nrow = 0; nrow < 8; nrow++) {
+            for (let ncol = 0; ncol < 8; ncol++) {
+              //Вибір клітинки для ходу
+              // console.log(possiblePieceToMove.piece.name + " " + possiblePieceToMove.piece.canMove(possibleCellForMove))
+              // console.log("threatCell: " + threatCell.piece?.name);
+              if(thisKingCell.board.getCell(row, col).piece?.canMove(thisKingCell.board.getCell(nrow, ncol))){
+                result = true;
+              }
+              if (!thisKingCell.board.getCell(nrow, ncol).piece){
+                thisKingCell.board.getCell(nrow, ncol).setPiece(thisKingCell.board.getCell(row, col).piece);
+                if(savedThreatCell.piece?.canMove(thisKingCell) === false){
+                  console.log(thisKingCell.board.getCell(row, col).piece?.name + " " + thisKingCell.board.getCell(row, col).x + " " + thisKingCell.board.getCell(row, col).y + " | " + thisKingCell.board.getCell(nrow, ncol).x + " " + thisKingCell.board.getCell(nrow, ncol).y);
+                  result = true;
+                }
+                thisKingCell.board.getCell(nrow, ncol).setPiece(null);
+                thisKingCell.board.getCell(nrow, ncol).piece = null;
+              }
+              thisKingCell.board.getCell(row, col).piece = savePossiblePieceToMovePiece;
+              if(result){
+                return result;
+              }
+            }
+          }
+        }
+      }
+    }
+    return result;
+  }
+
   public checkIfCheck(target: Cell): boolean {
+    console.log("-")
     var result: boolean = false;
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const targetCell = target.board.getCell(row, col);
-        if (target.piece && target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color) {
-          (targetCell.piece as King).isCheck = true;
-          (targetCell.piece as King).checkFromWho = target;
-          if(!(targetCell.piece as King).canKingMove() && (targetCell.piece as King).isCheck){
-            (targetCell.piece as King).isCheckMate = true;
-            result = true;
-          }
-        }
-        else if(target.piece && !target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color){
+        if(target.piece && !target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color){
           (targetCell.piece as King).isCheck = false;
           (targetCell.piece as King).checkFromWho = null;
           let otherMoves: number = 0;
@@ -95,6 +138,15 @@ export class Piece{
           }  
           if(!(targetCell.piece as King).canKingMove() && otherMoves === 0 && !(targetCell.piece as King).isCheck){
             (targetCell.piece as King).isStaleMate = true;
+            result = false;
+          }
+        }
+        else if (target.piece && target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color) {
+          (targetCell.piece as King).isCheck = true;
+          (targetCell.piece as King).checkFromWho = target;
+          const checkFromWho = (targetCell.piece as King).checkFromWho;
+          if(!(targetCell.piece as King).canKingMove() && (targetCell.piece as King).isCheck && checkFromWho !== null){
+            (targetCell.piece as King).isCheckMate = true;
             result = true;
           }
         }
@@ -103,6 +155,7 @@ export class Piece{
     return result;
   }
   public recheckIfCheck(target: Cell): boolean {
+    console.log("#")
     var result: boolean = false;
     const enemy = this.cell;
     if(enemy.piece === null){
@@ -117,7 +170,8 @@ export class Piece{
           (target.piece as King).isCheck = true;
           (target.piece as King).checkFromWho = enemy;
           let otherMoves: number = 0;
-          if(!(target.piece as King).canKingMove() && (target.piece as King).isCheck){
+          const checkFromWho = (target.piece as King).checkFromWho;
+          if(!(target.piece as King).canKingMove() && (target.piece as King).isCheck && checkFromWho !== null && (target.piece as King).tryFindSaveMove(checkFromWho, (target.piece as King).cell) === false){
             (target.piece as King).isCheckMate = true;
           }
           result = true;
@@ -161,7 +215,8 @@ export class Piece{
   }
   public movePiece(target: Cell){
     //this.cell.addMove(this.cell, target);
-    this.checkIfCheck(target);
-    this.cell.board.endGame = true;
+    //this.recheckIfCheck(target);
+    console.log(this.name + " moved: " + this.cell.x + ";" + this.cell.y + " " + target.x + ";" + target.y)
+    //this.cell.board.endGame = true;
   }
 }

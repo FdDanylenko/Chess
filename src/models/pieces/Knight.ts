@@ -18,7 +18,7 @@ export class Knight extends Piece{
     }
     const dx = Math.abs(this.cell.x - target.x);
     const dy = Math.abs(this.cell.y - target.y);
-    return (dx === 1 && dy === 2) || (dy === 1 && dx === 2)
+    return (dx === 1 && dy === 2) || (dy === 1 && dx === 2);
   }
   public canMoveForProtection(target: Cell): boolean{
     if(!super.canMoveForProtection(target)){

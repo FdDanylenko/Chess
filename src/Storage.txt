@@ -1,0 +1,127 @@
+//=== Old version of checkIfCheck function =====
+
+  public checkIfCheck(target: Cell): boolean {
+    var result: boolean = false;
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        const targetCell = target.board.getCell(row, col);
+        if (target.piece && target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color) {
+          (targetCell.piece as King).isCheck = true;
+          (targetCell.piece as King).checkFromWho = target;
+          if(!(targetCell.piece as King).canKingMove() && (targetCell.piece as King).isCheck){
+            (targetCell.piece as King).isCheckMate = true;
+            result = true;
+          }
+        }
+        else if(target.piece && !target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color){
+          (targetCell.piece as King).isCheck = false;
+          (targetCell.piece as King).checkFromWho = null;
+          let otherMoves: number = 0;
+          for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+              const findOtherPiece = target.board.getCell(row, col);
+              if(findOtherPiece.piece?.canPieceMove() && findOtherPiece.piece?.color === targetCell.color){
+                otherMoves += 1;
+              }
+            }
+          }  
+          if(!(targetCell.piece as King).canKingMove() && otherMoves === 0 && !(targetCell.piece as King).isCheck){
+            (targetCell.piece as King).isStaleMate = true;
+            result = true;
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+//=== Old version of tryFindSaveMove function =====
+
+  public tryFindSaveMove(threatCell: Cell, thisKingCell: Cell):boolean{
+    console.log("+")
+    let savedThreatCell = threatCell;
+    let result: boolean = false;  
+
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        //Вибір координат фігури
+        let possiblePieceToMove = this.cell.board.getCell(row, col);
+        let savePossiblePieceToMove: Cell = possiblePieceToMove;
+        let savePossiblePieceToMovePiece = possiblePieceToMove.piece;
+        //Перевірка чи є вона союзною
+        if(possiblePieceToMove.piece && possiblePieceToMove.piece?.color === thisKingCell.piece?.color && possiblePieceToMove.piece?.name !== PiecesNames.KING){
+              console.log(possiblePieceToMove.piece.name + " " + possiblePieceToMove.piece.canMove(savedThreatCell))
+              console.log("threatCell: " + threatCell.piece?.name);
+              if(possiblePieceToMove.piece.canMove(savedThreatCell)){
+                result = true;
+                return result;
+              }
+          for (let nrow = 0; nrow < 8; nrow++) {
+            for (let ncol = 0; ncol < 8; ncol++) {
+              //Вибір клітинки для ходу
+              const possibleCellForMove = thisKingCell.board.getCell(nrow, ncol);
+              // console.log(possiblePieceToMove.piece.name + " " + possiblePieceToMove.piece.canMove(possibleCellForMove))
+              // console.log("threatCell: " + threatCell.piece?.name);
+              if(possiblePieceToMove.piece?.canMove(possibleCellForMove)){
+                result = true;
+              }
+              if (!possibleCellForMove.piece){
+                possibleCellForMove.setPiece(possiblePieceToMove.piece);
+                if(savedThreatCell.piece?.canMove(thisKingCell) === false){
+                  console.log(possiblePieceToMove.piece?.name + " " + possiblePieceToMove.x + " " + possiblePieceToMove.y + " | " + possibleCellForMove.x + " " + possibleCellForMove.y);
+                  result = true;
+                }
+                possibleCellForMove.setPiece(null);
+                possibleCellForMove.piece = null;
+              }
+              possiblePieceToMove = savePossiblePieceToMove;
+              possiblePieceToMove.piece = savePossiblePieceToMovePiece;
+              if(result){
+                return result;
+              }
+            }
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  //=== Old version of botFunction function =====
+  function botFunction(){
+    let botCells: Cell[] = getBotCells();
+    const randomIndex = Math.floor(Math.random() * botCells.length);
+    const randomBotCell = botCells[randomIndex];
+    setSelectedCell(botCells[randomIndex]);
+    let randomCellToMove: Cell = board.getCell(Math.floor(Math.random() * 8), Math.floor(Math.random() * 8) )
+    if(selectedCell && selectedCell !== randomCellToMove && selectedCell.piece?.canMove(randomCellToMove)){
+      let pieceCheck: boolean = randomCellToMove.piece ? true : false;
+      let catchError: number = selectedCell.movePiece(randomCellToMove);
+      if(catchError === 4){
+        return false;
+      }
+      setSelectedCell(null);
+      //=====================================================================================================
+      let enemyKing: Cell | void = board.findKing(board, getOppociteColor(currentPlayer));
+      let myKing: Cell | void = board.findKing(board, currentPlayer.color);
+      if(((enemyKing as Cell).piece as King).isCheckMate){
+        board.setWinner(currentPlayer.color, "Checkmate")
+      }
+      if(((myKing as Cell).piece as King).isCheckMate){
+        board.setWinner(getOppociteColor(currentPlayer), "Checkmate")
+      }
+      if(((enemyKing as Cell).piece as King).isStaleMate){
+        board.setWinner("Draw", "StaleMate")
+      }
+      if(((myKing as Cell).piece as King).isStaleMate){
+        board.setWinner("Draw", "StaleMate")
+      }
+      pieceCheck ? PlaySound(captureSound) : PlaySound(moveSound);
+      //=====================================================================================================
+      swapPlayer();
+    }else{
+      if(randomCellToMove.piece?.color === currentPlayer?.color){
+        setSelectedCell(randomCellToMove);
+      }
+    }
+  }

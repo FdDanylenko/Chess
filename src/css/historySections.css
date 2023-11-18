@@ -1,9 +1,9 @@
 .history-box{
   display: flex;
-  width: calc(100%-10px);
+  width: 20px;
   padding: 0 5px;
   overflow-y: hidden;
-  overflow-x: scroll;
+  overflow-x: hidden;
   height: 2em;
   background-color: #262522;
   margin: 10px 0;
