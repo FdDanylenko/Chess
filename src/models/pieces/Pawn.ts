@@ -16,6 +16,7 @@ export class Pawn extends Piece{
     super(color, cell)
     this.logo = color === Colors.BLACK ? blackLogo : whiteLogo;
     this.name = PiecesNames.PAWN; 
+    this.strength = 10;
   }
   public canMove(target: Cell): boolean {
     if(!super.canMove(target)){
@@ -58,11 +59,9 @@ export class Pawn extends Piece{
     if(abs === 2 && this.cell.piece?.name === PiecesNames.PAWN){
       if(this.color === Colors.WHITE){
         this.cell.board.getCell(target.x, target.y+1).availableToPassant = true;
-        console.log("Pasant:" + this.cell.board.getCell(target.x, target.y+1).availableToPassant + " " + target.x + " " + (target.y + 1))
       }
       if(this.color === Colors.BLACK){
         this.cell.board.getCell(target.x, target.y-1).availableToPassant = true;
-        console.log("Pasant:" + this.cell.board.getCell(target.x, target.y-1).availableToPassant + " " + target.x + " " + (target.y -  1))
       }
     }
     //this.isFirstStep = false;

@@ -85,7 +85,6 @@ export class Cell{
     }
   }
   addMove(cell: Cell, target: Cell, targetPiece: Piece | null, additioanlInfo: string, addLostPiece: boolean){
-    console.log(addLostPiece);
     var letter = String.fromCharCode('A'.charCodeAt(0) + target.x);
     if(cell.piece?.color === Colors.BLACK){
       if(cell.piece.name.charAt(2).toLowerCase() === 'n' && target.x - cell.x === 2){
@@ -172,7 +171,8 @@ export class Cell{
       target.setPiece(this.piece);
       this.piece = null;
   
-      let myKing: Cell | void = this.board.findKing(this.board, target.piece ? target.piece?.color : Colors.SELECTED);
+      let myKing: Cell | void = this.board.findKing(this.board, thisPiece.color);
+      console.log((myKing as Cell).piece?.name + " " + (myKing as Cell).piece?.color + " " + (myKing as Cell).x + " " + (myKing as Cell).y);
       ((myKing as Cell).piece as King).checkFromWho?.piece?.recheckIfCheck((myKing as Cell));
       for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 8; col++) {
@@ -194,7 +194,6 @@ export class Cell{
         }
         if(this.piece && (this.piece as Pawn)){
           (this.piece as Pawn).isFirstStep = !wasPawnsFirstMove;
-          //(this.piece as Pawn).isFirstStep = false;
         }
         let foundedCell: Cell | null = this.board.getCell(this.board.previousPasant?.x ? this.board.previousPasant?.x : 0, this.board.previousPasant?.y ? this.board.previousPasant?.y : 0);
         this.board.previousPasant = null;
@@ -210,16 +209,17 @@ export class Cell{
       }
       this.piece = thisPiece;
       let enemyKing: Cell | void = this.board.findKing(this.board, (thisPiece.color === Colors.WHITE ? Colors.BLACK : Colors.WHITE));
-      this.piece?.recheckIfCheck((enemyKing as Cell));
+      ((enemyKing as Cell).piece as King).checkFromWho?.piece?.checkIfCheck((enemyKing as Cell));
+      console.log((enemyKing as Cell).piece?.name + " " + (enemyKing as Cell).piece?.color + " " + (enemyKing as Cell).x + " " + (myKing as Cell).y);
       if(thisPiece instanceof Pawn && target.y ===  (thisPiece.color === Colors.WHITE ? 0 : 7)){
         additioanlInfo += "Q";
       }
       if(((enemyKing as Cell).piece as King).isCheck || ((enemyKing as Cell).piece as King).isCheckMate){
-        if(((enemyKing as Cell).piece as King).isCheck){
-          additioanlInfo += "+";
+        if(((enemyKing as Cell).piece as King).isCheckMate){
+          additioanlInfo += "#";
         }
         else{
-          additioanlInfo += "#";
+          additioanlInfo += "+";
         }
       }
       if(this.piece?.name === PiecesNames.PAWN){

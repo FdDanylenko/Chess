@@ -11,6 +11,7 @@ export class Knight extends Piece{
     super(color, cell)
     this.logo = color === Colors.BLACK ? blackLogo : whiteLogo;
     this.name = PiecesNames.KNIGHT; 
+    this.strength = 30;
   }
   public canMove(target: Cell): boolean {
     if(!super.canMove(target)){

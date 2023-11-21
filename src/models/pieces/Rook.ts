@@ -10,6 +10,7 @@ export class Rook extends Piece{
     super(color, cell)
     this.logo = color === Colors.BLACK ? blackLogo : whiteLogo;
     this.name = PiecesNames.ROOK; 
+    this.strength = 50;
   }
   public canMove(target: Cell): boolean {
     if(!super.canMove(target)){
