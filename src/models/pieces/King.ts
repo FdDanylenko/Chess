@@ -19,6 +19,7 @@ export class King extends Piece{
     super(color, cell)
     this.logo = color === Colors.BLACK ? blackLogo : whiteLogo;
     this.name = PiecesNames.KING; 
+    this.strength = 100;
   }
 
   public isCellCheck(target: Cell): boolean {
