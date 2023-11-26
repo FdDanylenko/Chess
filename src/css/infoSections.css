@@ -5,12 +5,12 @@
   justify-content: space-between;
 }
 .player-info{
-  width: 50%;
+  width: 100%;
   display: flex;
 }
 .bot-icon{
   border-radius: 5px;
-  background-image: url(../assets/bot-icon.png);
+  background-image: url(../assets/player-icon.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   height: 2em;

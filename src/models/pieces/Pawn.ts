@@ -16,7 +16,6 @@ export class Pawn extends Piece{
     super(color, cell)
     this.logo = color === Colors.BLACK ? blackLogo : whiteLogo;
     this.name = PiecesNames.PAWN; 
-    this.strength = 10;
   }
   public canMove(target: Cell): boolean {
     if(!super.canMove(target)){

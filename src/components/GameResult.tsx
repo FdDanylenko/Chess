@@ -37,18 +37,18 @@ const GameResult: FC<GameResultProps> = ({isGameResultDialogOpen, setIsGameResul
       <div className="game-result-window">
         <div className="game-result__decoration"></div>
         <div className="titles-box">
-          <div className="game-result__title">{winner !== "Draw" ? (winner === Colors.WHITE ? "You won" : "You lost") : "Draw"}</div>
+          <div className="game-result__title">{winner !== "Draw" ? (winner === Colors.WHITE ? "White won" : "Black won") : "Draw"}</div>
           <div className="game-result__subtitle">by {reason}</div>
         </div>
         <div className="players-box">
           <div className="white-player">
             <div className="game-result__player-icon"></div>
-            <div className="game-result__player-name">You</div>
+            <div className="game-result__player-name">White player</div>
           </div>
           <span className="vs-text">vs</span>
           <div className="black-player">
             <div className="game-result__player-icon bot"></div>
-            <div className="game-result__player-name">Bot</div>
+            <div className="game-result__player-name">Black player</div>
           </div>
         </div>
         <div className="buttons-box">

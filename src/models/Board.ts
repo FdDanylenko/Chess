@@ -19,6 +19,7 @@ export class Board{
   public winner: string = "black";
   public reason: string = "time run out";
   public previousPasant: Cell | null = null;
+  public promotionDialog: boolean = false;
 
   public initCells(){
     for (let i = 0; i < 8; i++) {
@@ -75,7 +76,7 @@ export class Board{
 
   public findKing(board: Board, color: Colors): Cell | void {
     const cells = board.cells.flat();
-    return cells.find((cell) => cell.piece?.color === color && cell.piece as King);
+    return cells.find((cell) => cell.piece?.color === color && cell.piece instanceof King);
   }
 
   public addPieces(){
@@ -104,11 +105,14 @@ export class Board{
     }
   }
   public addTestPieces(){
-    new King(Colors.WHITE, this.getCell(1, 2));
-    new Queen(Colors.WHITE, this.getCell(6, 0));
-    new Queen(Colors.WHITE, this.getCell(6, 1));
+    new King(Colors.WHITE, this.getCell(3, 3));
+    new Queen(Colors.WHITE, this.getCell(3, 2 ));
+    new Pawn(Colors.WHITE, this.getCell(0, 5));
     //============================================
-    new King(Colors.BLACK, this.getCell(7, 7));
-    //new Pawn(Colors.BLACK, this.getCell(6, 0));
+    new King(Colors.BLACK, this.getCell(7, 0));
+    new Pawn(Colors.BLACK, this.getCell(0, 2));
+    new Bishop(Colors.BLACK, this.getCell(7, 2));
+    new Bishop(Colors.BLACK, this.getCell(7, 1));
+    new Bishop(Colors.BLACK, this.getCell(6, 1));
   }
 }

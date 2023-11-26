@@ -5,7 +5,6 @@ import { Board } from "./Board";
 import { King } from "./pieces/King";
 import { Bishop } from "./pieces/Bishop";
 import { Pawn } from "./pieces/Pawn";
-import { PieceFactory } from "./pieces/PieceFactory";
 export class Cell{
   readonly x: number;
   readonly y: number;
@@ -136,10 +135,6 @@ export class Cell{
     }
   }
 
-  moveThatFit(target: Cell){
-    
-  }
-
   movePiece(target: Cell){
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
@@ -171,8 +166,8 @@ export class Cell{
       target.setPiece(this.piece);
       this.piece = null;
   
-      let myKing: Cell | void = this.board.findKing(this.board, thisPiece.color);
-      console.log((myKing as Cell).piece?.name + " " + (myKing as Cell).piece?.color + " " + (myKing as Cell).x + " " + (myKing as Cell).y);
+      //let myKing: Cell | void = this.board.findKing(this.board, target.piece ? target.piece?.color : Colors.SELECTED);
+      let myKing: Cell | void = thisPiece.findAllyKing(thisPiece.color);
       ((myKing as Cell).piece as King).checkFromWho?.piece?.recheckIfCheck((myKing as Cell));
       for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 8; col++) {
@@ -194,6 +189,7 @@ export class Cell{
         }
         if(this.piece && (this.piece as Pawn)){
           (this.piece as Pawn).isFirstStep = !wasPawnsFirstMove;
+          //(this.piece as Pawn).isFirstStep = false;
         }
         let foundedCell: Cell | null = this.board.getCell(this.board.previousPasant?.x ? this.board.previousPasant?.x : 0, this.board.previousPasant?.y ? this.board.previousPasant?.y : 0);
         this.board.previousPasant = null;
@@ -204,27 +200,23 @@ export class Cell{
         target.piece = targetPiece;
         if(this.piece && (this.piece as Pawn)){
           (this.piece as Pawn).isFirstStep = wasPawnsFirstMove;
+          this.board.getCell(this.x, (this.y+1)).availableToPassant = false;
         }
         return 4;
       }
       this.piece = thisPiece;
       let enemyKing: Cell | void = this.board.findKing(this.board, (thisPiece.color === Colors.WHITE ? Colors.BLACK : Colors.WHITE));
-      ((enemyKing as Cell).piece as King).checkFromWho?.piece?.checkIfCheck((enemyKing as Cell));
-      console.log((enemyKing as Cell).piece?.name + " " + (enemyKing as Cell).piece?.color + " " + (enemyKing as Cell).x + " " + (myKing as Cell).y);
+      this.piece?.recheckIfCheck((enemyKing as Cell));
       if(thisPiece instanceof Pawn && target.y ===  (thisPiece.color === Colors.WHITE ? 0 : 7)){
         additioanlInfo += "Q";
       }
-      if(((enemyKing as Cell).piece as King).isCheck || ((enemyKing as Cell).piece as King).isCheckMate){
-        if(((enemyKing as Cell).piece as King).isCheckMate){
-          additioanlInfo += "#";
-        }
-        else{
-          additioanlInfo += "+";
-        }
+      if(((enemyKing as Cell).piece as King).isCheck){
+        additioanlInfo += "+";
       }
-      if(this.piece?.name === PiecesNames.PAWN){
-        (this.piece as Pawn).isFirstStep = false;
+      if(((enemyKing as Cell).piece as King).isCheckMate){
+        additioanlInfo += "#";
       }
+      (this.piece as Pawn).isFirstStep = false;
       this.addMove(this, target, targetPiece ? targetPiece : null, additioanlInfo, addLostPiece);
       this.piece = null;
       return 1;

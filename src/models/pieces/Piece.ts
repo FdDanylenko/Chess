@@ -10,7 +10,6 @@ export class Piece{
   logo: typeof logo | null;
   cell: Cell;
   name: PiecesNames;
-  strength: number = 0;
   enPasantIsAvailable: boolean = false;
   id: number;
 
@@ -38,11 +37,36 @@ export class Piece{
   }
 
   public canMove(target: Cell): boolean{
+    let myKing: Cell | void = this.findAllyKing(this.color);
+    let Threat: Cell | null = (myKing.piece as King).checkFromWho;
     if(target.piece?.color === this.color){
       return false;
     }
-    if(target.board.endGame){
-      return false;
+    let horisontal: boolean = false;
+    let vertical: boolean = false;
+    let diagonal: boolean = false;
+    if(Threat !== null){
+      if(myKing.x === (myKing.piece as King).checkFromWho?.x){
+        if(target.x === myKing.x){
+          vertical = true;
+          return true
+        }
+      }
+      if(myKing.y === (myKing.piece as King).checkFromWho?.y){
+        if(target.y === myKing.y){
+          horisontal = true;
+          return true
+        }
+      }
+      if((Math.abs(myKing.x - target.x) === Math.abs(myKing.y - target.y)) && (Math.abs(target.x - (Threat as Cell).x) === Math.abs(target.y - (Threat as Cell).y)) && (
+        (Math.abs(myKing.x - target.x)) <= (Math.abs(target.x - (Threat as Cell).x))
+      )){
+        diagonal = true;
+        return true;
+      }
+      if((myKing.piece as King).isCheck && this.name !== PiecesNames.KING && (myKing.piece as King).checkFromWho !== target && (!horisontal && !vertical && !diagonal)){
+        return false;
+      }
     }
     return true;
   }
@@ -59,91 +83,55 @@ export class Piece{
     }
     return false;
   }
-  public canPieceMove(): boolean{
-    const myPiece: Cell = this.cell;
+  public canPieceMove(theColor: Colors): boolean{
+    let thisPiece = this;
     const board = this.cell.board;
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const targetCell = board.getCell(row, col);
-        if (myPiece.piece?.canMove(targetCell)){
+        if (thisPiece.canMove(targetCell)){
           return true;
         }
       }
     }
     return false;
   }
-
-  // Функція отримує короля і загрозу для нього, шукає союзну фігуру короля і клітинку в яку
-  // б вона могла похрдити щоб при повторній перевірці шаху загроза шаху переставала існувати
-  public tryFindSaveMove(threatCell: Cell, thisKingCell: Cell):boolean{
-    let savedThreatCell = threatCell;
-    let result: boolean = false;  
-
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
-        //Вибір координат фігури
-        let savePossiblePieceToMove: Cell = thisKingCell.board.getCell(row, col);
-        let savePossiblePieceToMovePiece = thisKingCell.board.getCell(row, col).piece;
-        //Перевірка чи є вона союзною
-        if(thisKingCell.board.getCell(row, col).piece && thisKingCell.board.getCell(row, col).piece?.color === thisKingCell.piece?.color && thisKingCell.board.getCell(row, col).piece?.name !== PiecesNames.KING){
-              if(thisKingCell.board.getCell(row, col).piece?.canMove(savedThreatCell)){
-                result = true;
-                return result;
-              }
-          for (let nrow = 0; nrow < 8; nrow++) {
-            for (let ncol = 0; ncol < 8; ncol++) {
-              //Вибір клітинки для ходу
-              if(thisKingCell.board.getCell(row, col).piece?.canMove(thisKingCell.board.getCell(nrow, ncol))){
-                result = true;
-              }
-              if (!thisKingCell.board.getCell(nrow, ncol).piece){
-                thisKingCell.board.getCell(nrow, ncol).setPiece(thisKingCell.board.getCell(row, col).piece);
-                if(savedThreatCell.piece?.canMove(thisKingCell) === false){
-                  result = true;
-                }
-                thisKingCell.board.getCell(nrow, ncol).setPiece(null);
-                thisKingCell.board.getCell(nrow, ncol).piece = null;
-              }
-              thisKingCell.board.getCell(row, col).piece = savePossiblePieceToMovePiece;
-              if(result){
-                return result;
-              }
-            }
-          }
-        }
-      }
-    }
-    return result;
-  }
-
   public checkIfCheck(target: Cell): boolean {
     var result: boolean = false;
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const targetCell = target.board.getCell(row, col);
-        if(target.piece && !target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color){
+        if (target.piece && target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color) {
+          (targetCell.piece as King).isCheck = true;
+          (targetCell.piece as King).checkFromWho = target;
+          let otherMoves: number = 0;
+          for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+              const findOtherPiece = target.board.getCell(row, col);
+              if(findOtherPiece.piece?.canPieceMove(target.piece.color) && findOtherPiece.piece?.color !== this.color){
+                otherMoves += 1;
+              }
+            }
+          }
+          if(!(targetCell.piece as King).canKingMove() && (targetCell.piece as King).isCheck && otherMoves === 0){
+            (targetCell.piece as King).isCheckMate = true;
+            result = true;
+          }
+        }
+        else if(target.piece && !target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color){
           (targetCell.piece as King).isCheck = false;
           (targetCell.piece as King).checkFromWho = null;
           let otherMoves: number = 0;
           for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 8; col++) {
               const findOtherPiece = target.board.getCell(row, col);
-              if(findOtherPiece.piece?.canPieceMove() && findOtherPiece.piece?.color === targetCell.color){
+              if(findOtherPiece.piece?.canPieceMove(target.piece.color) && findOtherPiece.piece?.color === targetCell.color){
                 otherMoves += 1;
               }
             }
           }  
           if(!(targetCell.piece as King).canKingMove() && otherMoves === 0 && !(targetCell.piece as King).isCheck){
             (targetCell.piece as King).isStaleMate = true;
-            result = false;
-          }
-        }
-        else if (target.piece && target.piece.canMove(targetCell) && targetCell.piece?.name === PiecesNames.KING && targetCell.piece.color !== target.piece?.color) {
-          (targetCell.piece as King).isCheck = true;
-          (targetCell.piece as King).checkFromWho = target;
-          const checkFromWho = (targetCell.piece as King).checkFromWho;
-          if(!(targetCell.piece as King).canKingMove() && (targetCell.piece as King).isCheck && checkFromWho !== null){
-            (targetCell.piece as King).isCheckMate = true;
             result = true;
           }
         }
@@ -166,8 +154,15 @@ export class Piece{
           (target.piece as King).isCheck = true;
           (target.piece as King).checkFromWho = enemy;
           let otherMoves: number = 0;
-          const checkFromWho = (target.piece as King).checkFromWho;
-          if(!(target.piece as King).canKingMove() && (target.piece as King).isCheck && checkFromWho !== null/* && (target.piece as King).tryFindSaveMove(checkFromWho, (target.piece as King).cell) === false*/){
+          for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+              const findOtherPiece = target.board.getCell(row, col);
+              if(findOtherPiece.piece?.canPieceMove(target.piece.color) && findOtherPiece.piece?.color !== this.color){
+                otherMoves += 1;
+              }
+            }
+          }
+          if(!(target.piece as King).canKingMove() && (target.piece as King).isCheck && otherMoves === 0){
             (target.piece as King).isCheckMate = true;
           }
           result = true;
@@ -179,11 +174,11 @@ export class Piece{
           for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 8; col++) {
               const findOtherPiece = target.board.getCell(row, col);
-              if(findOtherPiece.piece?.canPieceMove() && findOtherPiece.piece?.color === target.color){
+              if(findOtherPiece.piece?.canPieceMove(target.piece.color) && findOtherPiece.piece?.color === target.color){
                 otherMoves += 1;
               }
             }
-          }  
+          }
           if(!(target.piece as King).canKingMove() && otherMoves === 0 && !(target.piece as King).isCheck){
             (target.piece as King).isStaleMate = true;
             result = true;
@@ -211,7 +206,7 @@ export class Piece{
   }
   public movePiece(target: Cell){
     //this.cell.addMove(this.cell, target);
-    this.recheckIfCheck(target);
-    //this.cell.board.endGame = true;
+    this.checkIfCheck(target);
+    this.cell.board.endGame = true;
   }
 }
