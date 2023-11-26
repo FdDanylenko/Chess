@@ -23,11 +23,17 @@ export class King extends Piece{
   public isCellCheck(target: Cell): boolean {
     const kingPosition = this.cell;
     const board = this.cell.board;
-  
+    let Threat = this.checkFromWho;
+    if(this.checkFromWho){
+      if(this.isCheck && (target.x === this.checkFromWho.x || target.y === this.checkFromWho.y || 
+        ((Math.abs(this.cell.x - target.x) === Math.abs(this.cell.y - target.y)) && (Math.abs(target.x - (Threat as Cell).x) === Math.abs(target.y - (Threat as Cell).y))))){
+        return true;
+      }
+    }
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const opponentPiece = board.getCell(col, row);
-        if (opponentPiece.piece && opponentPiece.piece.name !== PiecesNames.KING && opponentPiece.piece?.color !== kingPosition.piece?.color && opponentPiece.piece?.canMove(target)) {
+        if (opponentPiece.piece && opponentPiece.piece.name !== PiecesNames.PAWN && opponentPiece.piece.name !== PiecesNames.KING && opponentPiece.piece?.color !== kingPosition.piece?.color && opponentPiece.piece?.canMove(target)) {
           return true;
         }
       }

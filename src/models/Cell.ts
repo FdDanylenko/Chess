@@ -168,6 +168,7 @@ export class Cell{
   
       //let myKing: Cell | void = this.board.findKing(this.board, target.piece ? target.piece?.color : Colors.SELECTED);
       let myKing: Cell | void = thisPiece.findAllyKing(thisPiece.color);
+      console.log(myKing);
       ((myKing as Cell).piece as King).checkFromWho?.piece?.recheckIfCheck((myKing as Cell));
       for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 8; col++) {

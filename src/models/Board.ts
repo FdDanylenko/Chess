@@ -106,13 +106,9 @@ export class Board{
   }
   public addTestPieces(){
     new King(Colors.WHITE, this.getCell(3, 3));
-    new Queen(Colors.WHITE, this.getCell(3, 2 ));
-    new Pawn(Colors.WHITE, this.getCell(0, 5));
+    new Queen(Colors.WHITE, this.getCell(5, 7 ));
+    new Queen(Colors.WHITE, this.getCell(6, 6 ));
     //============================================
-    new King(Colors.BLACK, this.getCell(7, 0));
-    new Pawn(Colors.BLACK, this.getCell(0, 2));
-    new Bishop(Colors.BLACK, this.getCell(7, 2));
-    new Bishop(Colors.BLACK, this.getCell(7, 1));
-    new Bishop(Colors.BLACK, this.getCell(6, 1));
+    new King(Colors.BLACK, this.getCell(7, 2));
   }
 }
