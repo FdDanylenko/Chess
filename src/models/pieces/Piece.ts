@@ -58,7 +58,7 @@ export class Piece{
           return true
         }
       }
-      if((Math.abs(myKing.x - target.x) === Math.abs(myKing.y - target.y)) && (Math.abs(target.x - (Threat as Cell).x) === Math.abs(target.y - (Threat as Cell).y)) && (
+      if((Math.abs(myKing.x - target.x) === Math.abs(myKing.y - target.y)) && (Math.abs(target.x - (Threat as Cell).x) === Math.abs(target.y - (Threat as Cell).y)) && (Math.abs(myKing.x - Threat.x) === Math.abs(myKing.y - Threat.y)) && (
         (Math.abs(myKing.x - target.x)) <= (Math.abs(target.x - (Threat as Cell).x))
       )){
         diagonal = true;
