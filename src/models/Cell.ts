@@ -168,7 +168,6 @@ export class Cell{
   
       //let myKing: Cell | void = this.board.findKing(this.board, target.piece ? target.piece?.color : Colors.SELECTED);
       let myKing: Cell | void = thisPiece.findAllyKing(thisPiece.color);
-      console.log(myKing);
       ((myKing as Cell).piece as King).checkFromWho?.piece?.recheckIfCheck((myKing as Cell));
       for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 8; col++) {
@@ -211,11 +210,13 @@ export class Cell{
       if(thisPiece instanceof Pawn && target.y ===  (thisPiece.color === Colors.WHITE ? 0 : 7)){
         additioanlInfo += "Q";
       }
-      if(((enemyKing as Cell).piece as King).isCheck){
-        additioanlInfo += "+";
-      }
-      if(((enemyKing as Cell).piece as King).isCheckMate){
-        additioanlInfo += "#";
+      if(((enemyKing as Cell).piece as King).isCheck || ((enemyKing as Cell).piece as King).isCheckMate){
+        if(((enemyKing as Cell).piece as King).isCheckMate){
+          additioanlInfo += "#";
+        }
+        else{
+          additioanlInfo += "+";
+        }
       }
       (this.piece as Pawn).isFirstStep = false;
       this.addMove(this, target, targetPiece ? targetPiece : null, additioanlInfo, addLostPiece);
