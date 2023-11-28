@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Piece } from '../models/pieces/Piece';
-import { PieceNames } from '../models/pieces/types';
+import { PiecesNames } from '../models/pieces/PiecesNames';
 
 interface LostPiecesProps{
   pieces: Piece[];

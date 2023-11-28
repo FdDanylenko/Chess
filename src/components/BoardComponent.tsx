@@ -29,7 +29,6 @@ const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPla
         return false;
       }
       setSelectedCell(null);
-      //=====================================================================================================
       let enemyKing: Cell | void = board.findKing(board, getOppociteColor(currentPlayer));
       let myKing: Cell | void = board.findKing(board, currentPlayer.color);
       if(((enemyKing as Cell).piece as King).isCheckMate){
@@ -44,7 +43,6 @@ const BoardComponent: FC<BoardProps> = ({board, setBoard, currentPlayer, swapPla
       if(((myKing as Cell).piece as King).isStaleMate){
         board.setWinner("Draw", "StaleMate")
       }
-      //=====================================================================================================
       swapPlayer();
     }else{
       if(cell.piece?.color === currentPlayer?.color && !board.endGame){

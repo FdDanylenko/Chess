@@ -25,8 +25,8 @@ export class King extends Piece{
     const board = this.cell.board;
     let Threat = this.checkFromWho;
     if(this.checkFromWho){
-      if(this.isCheck && target !== Threat && (target.x === this.checkFromWho.x || target.y === this.checkFromWho.y || 
-        ((Math.abs(this.cell.x - target.x) === Math.abs(this.cell.y - target.y)) && (Math.abs(target.x - (Threat as Cell).x) === Math.abs(target.y - (Threat as Cell).y))))){
+      if(this.isCheck && target !== Threat && ((target.x === this.checkFromWho.x && this.checkFromWho.isEmtyHorizontal(target)) || (target.y === this.checkFromWho.y && this.checkFromWho.isEmptyVertical(target)) || 
+        (((Math.abs(this.cell.x - target.x) === Math.abs(this.cell.y - target.y)) && (Math.abs(target.x - (Threat as Cell).x) === Math.abs(target.y - (Threat as Cell).y))) && this.checkFromWho.isEmptyDiagonal(target)))){
         return true;
       }
     }

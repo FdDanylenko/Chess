@@ -1,4 +1,3 @@
-import { Console } from "console";
 import { Cell } from "./Cell";
 import { Colors } from "./Colors";
 import { Bishop } from "./pieces/Bishop";
@@ -56,7 +55,6 @@ export class Board{
     newBoard.endGame = this.endGame;
     newBoard.winner = this.winner;
     newBoard.reason = this.reason;
-    //newBoard.setWinner("white", "Checkmate");
     return newBoard;
   }
 
@@ -103,12 +101,5 @@ export class Board{
     for (let i = 0; i < 8; i++) {
       new Pawn(Colors.BLACK, this.getCell(i, 1));
     }
-  }
-  public addTestPieces(){
-    new King(Colors.WHITE, this.getCell(3, 4));
-    //============================================
-    new King(Colors.BLACK, this.getCell(5, 2));
-    new Rook(Colors.BLACK, this.getCell(3, 0));
-    new Pawn(Colors.BLACK, this.getCell(3, 1));
   }
 }

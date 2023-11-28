@@ -15,6 +15,7 @@
 }
 .pieces-box{
   display: flex;
+  max-width: -moz-fit-content;
   max-width: fit-content;
   height: 1em;
   background-color: transparent;

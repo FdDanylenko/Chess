@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import './App.css';
 import BoardComponent from './components/BoardComponent';
 import PlayerInfoComponent from './components/PlayerInfoComponent';
 import { Board } from './models/Board';
@@ -26,22 +25,10 @@ function App() {
     setTimeSet(Math.random());
   }, [])
 
-  // useEffect(() => {
-  //   const handleScrollToBottom = () => {
-  //     window.scrollTo({
-  //       top: document.documentElement.scrollHeight,
-  //       behavior: 'auto',
-  //     });
-  //     //console.log("scroll");
-  //   };
-  //   handleScrollToBottom();
-  // }, []);
-
   function restart(){
     const newBoard = new Board;
     newBoard.initCells();
     newBoard.addPieces();
-    //newBoard.addTestPieces();
     setBoard(newBoard);
     setTimeSet(Math.random);
   }
@@ -65,8 +52,6 @@ function App() {
   function closeGameResultDialog(){
     setIsGameResultDialogOpen(false);
   }
-  //<HistoryComponent moves={board.blackMoves}/>
-  //<HistoryComponent moves={board.whiteMoves}/>
 
   return (
     <div className="App">

@@ -3,7 +3,6 @@ import { Piece } from "./pieces/Piece";
 import { PiecesNames } from "./pieces/PiecesNames";
 import { Board } from "./Board";
 import { King } from "./pieces/King";
-import { Bishop } from "./pieces/Bishop";
 import { Pawn } from "./pieces/Pawn";
 export class Cell{
   readonly x: number;
@@ -139,7 +138,6 @@ export class Cell{
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const foundedCell = target.board.getCell(row, col);
-        //foundedCell.availableToPassant = false;
         if(foundedCell.availableToPassant){
           this.board.previousPasant = foundedCell;
         }
@@ -165,8 +163,6 @@ export class Cell{
       }
       target.setPiece(this.piece);
       this.piece = null;
-  
-      //let myKing: Cell | void = this.board.findKing(this.board, target.piece ? target.piece?.color : Colors.SELECTED);
       let myKing: Cell | void = thisPiece.findAllyKing(thisPiece.color);
       ((myKing as Cell).piece as King).checkFromWho?.piece?.recheckIfCheck((myKing as Cell));
       for (let row = 0; row < 8; row++) {
@@ -189,7 +185,6 @@ export class Cell{
         }
         if(this.piece && (this.piece as Pawn)){
           (this.piece as Pawn).isFirstStep = !wasPawnsFirstMove;
-          //(this.piece as Pawn).isFirstStep = false;
         }
         let foundedCell: Cell | null = this.board.getCell(this.board.previousPasant?.x ? this.board.previousPasant?.x : 0, this.board.previousPasant?.y ? this.board.previousPasant?.y : 0);
         this.board.previousPasant = null;
@@ -201,6 +196,7 @@ export class Cell{
         if(this.piece && (this.piece as Pawn)){
           (this.piece as Pawn).isFirstStep = wasPawnsFirstMove;
           this.board.getCell(this.x, (this.y+1)).availableToPassant = false;
+          ((myKing as Cell).piece as King).isCheck = false;
         }
         return 4;
       }
