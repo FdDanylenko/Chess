@@ -1,26 +1,23 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef, useLayoutEffect } from "react";
 
 interface HistoryComponentProps{
   moves: String[];
 }
 
 const HistoryComponent:FC<HistoryComponentProps> = ({moves}) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  const addAndScroll = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollLeft = containerRef.current.scrollWidth;
-    }
+  const ref = useRef<HTMLDivElement>(null);
+  const scrollToLastElement = () => {
+    const lastChildElement = ref.current?.lastElementChild;
+    lastChildElement?.scrollIntoView({ behavior: 'smooth' });
   };
-
   useEffect(() => {
-    addAndScroll();
-  }, [moves]);
+    scrollToLastElement();
+  }, []);
 
   return(
-    <div ref={containerRef} className="history-box">
+    <div className="history-box">
       {moves.map((move, index) =>
-          <div className="history-box-item" key={index}>
+          <div className="history-box-item" key={index} ref={index === moves.length - 1 ? ref : null}>
             &nbsp;{move}&nbsp;
           </div>
         )}
