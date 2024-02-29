@@ -34,20 +34,6 @@ export class Piece{
     return false;
   }
 
-  // const board = this.cell.board;
-    // let enemyIsThreating = false;
-    // for (let row = 0; row < 8; row++) {
-    //   for (let col = 0; col < 8; col++) {
-    //     const opponentPiece = board.getCell(col, row);
-    //     if(this.name !== PiecesNames.KING && opponentPiece.isEnemy(myKing) && opponentPiece.isEmptyVertical(this.cell) && this.cell.isEmptyVertical(myKing) && opponentPiece.x === myKing.x){
-    //       enemyIsThreating = true;
-    //     }
-    //   }
-    // }
-    // if (myKing.x === this.cell.x && enemyIsThreating && target.x !== myKing.x){
-    //   return false;
-    // }
-
   public canMove(target: Cell): boolean{
     let myKing: Cell | void = this.findAllyKing(this.color);
     let Threat: Cell | null = (myKing.piece as King).checkFromWho;
@@ -68,7 +54,7 @@ export class Piece{
             opponentPiece.piece &&
             opponentPiece.isEnemy(myKing) &&
             opponentPiece.isEmptyVertical(this.cell) &&
-            opponentPiece.piece?.canMoveDowngraded(this.cell) &&
+            (opponentPiece.piece.name === PiecesNames.QUEEN || opponentPiece.piece.name === PiecesNames.ROOK) &&
             this.cell.isEmptyVertical(myKing) &&
             opponentPiece.x === myKing.x &&
             this.cell.x === myKing.x &&
@@ -81,7 +67,7 @@ export class Piece{
             opponentPiece.piece &&
             opponentPiece.isEnemy(myKing) &&
             opponentPiece.isEmptyHorizontal(this.cell) &&
-            opponentPiece.piece?.canMoveDowngraded(this.cell) &&
+            (opponentPiece.piece.name === PiecesNames.QUEEN || opponentPiece.piece.name === PiecesNames.ROOK) &&
             this.cell.isEmptyHorizontal(myKing) &&
             opponentPiece.y === myKing.y &&
             this.cell.y === myKing.y &&
@@ -94,7 +80,7 @@ export class Piece{
             opponentPiece.piece &&
             opponentPiece.isEnemy(myKing) &&
             opponentPiece.isEmptyDiagonal(this.cell) &&
-            opponentPiece.piece?.canMoveDowngraded(this.cell) &&
+            (opponentPiece.piece.name === PiecesNames.QUEEN || opponentPiece.piece.name === PiecesNames.ROOK) &&
             this.cell.isEmptyDiagonal(myKing) &&
             Math.abs(opponentPiece.x - myKing.x) === Math.abs(opponentPiece.y - myKing.y) &&
             Math.abs(this.cell.x - myKing.x) === Math.abs(this.cell.y - myKing.y) &&
@@ -110,7 +96,9 @@ export class Piece{
 
     if(Threat !== null){
       if(myKing.x === (myKing.piece as King).checkFromWho?.x){
-        if(target.x === myKing.x){
+        const min = Math.min(myKing.y, Threat.y);
+        const max = Math.max(myKing.y, Threat.y);
+        if(target.x === myKing.x && (target.y < max && target.y > min)){
           vertical = true;
           return true;
         }
@@ -134,39 +122,11 @@ export class Piece{
     return true;
   }
   public canMoveDowngraded(target: Cell): boolean{
-    let myKing: Cell | void = this.findAllyKing(this.color);
-    let Threat: Cell | null = (myKing.piece as King).checkFromWho;
     if(target.piece?.color === this.color){
       return false;
     }
-    let horizontal: boolean = false;
-    let vertical: boolean = false;
-    let diagonal: boolean = false;
-    if(Threat !== null){
-      if(myKing.x === (myKing.piece as King).checkFromWho?.x){
-        if(target.x === myKing.x){
-          vertical = true;
-          return true;
-        }
-      }
-      if(myKing.y === (myKing.piece as King).checkFromWho?.y){
-        if(target.y === myKing.y){
-          horizontal = true;
-          return true;
-        }
-      }
-      if((Math.abs(myKing.x - target.x) === Math.abs(myKing.y - target.y)) && (Math.abs(target.x - (Threat as Cell).x) === Math.abs(target.y - (Threat as Cell).y)) && (Math.abs(myKing.x - Threat.x) === Math.abs(myKing.y - Threat.y)) && (
-        (target.x >= Math.min(myKing.x, Threat.x) && target.x <= Math.max(myKing.x, Threat.x) && target.y >= Math.min(myKing.y, Threat.y) && target.y <= Math.max(myKing.y, Threat.y))
-      )){
-        diagonal = true;
-        return true;
-      }
-      if((myKing.piece as King).isCheck && this.name !== PiecesNames.KING && (myKing.piece as King).checkFromWho !== target && (!horizontal && !vertical && !diagonal)){
-        return false;
-      }
-    }
     return true;
-  }
+  } 
   public canKingMove(): boolean{
     const myKing: Cell = this.findAllyKing(this.color);
     const board = this.cell.board;

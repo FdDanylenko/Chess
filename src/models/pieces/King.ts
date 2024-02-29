@@ -25,11 +25,27 @@ export class King extends Piece{
     const board = this.cell.board;
     let Threat = this.checkFromWho;
     if(this.checkFromWho){
+      // if(this.isCheck && target !== Threat &&
+      //   ((target.x === this.checkFromWho.x && Threat?.piece?.canMoveDowngraded(this.cell)) ||
+      //   (target.y === this.checkFromWho.y && Threat?.piece?.canMoveDowngraded(this.cell)) || 
+      //   (((Math.abs(this.cell.x - target.x) === Math.abs(this.cell.y - target.y)) &&
+      //   (Math.abs(target.x - (Threat as Cell).x) === Math.abs(target.y - (Threat as Cell).y))) && Threat?.piece?.canMoveDowngraded(this.cell)))){
+      //   return true;
+      // }
       if(this.isCheck && target !== Threat &&
-        ((target.x === this.checkFromWho.x && Threat?.piece?.canMove(this.cell)) ||
-        (target.y === this.checkFromWho.y && Threat?.piece?.canMove(this.cell)) || 
+        (target.x === this.checkFromWho.x && Threat?.piece?.canMoveDowngraded(this.cell)) &&
+        Threat.piece.name !== PiecesNames.BISHOP){
+        return true;
+      }
+      if(this.isCheck && target !== Threat &&
+        (target.y === this.checkFromWho.y && Threat?.piece?.canMoveDowngraded(this.cell)) &&
+        Threat.piece.name !== PiecesNames.BISHOP){
+        return true;
+      }
+      if(this.isCheck && target !== Threat &&
         (((Math.abs(this.cell.x - target.x) === Math.abs(this.cell.y - target.y)) &&
-        (Math.abs(target.x - (Threat as Cell).x) === Math.abs(target.y - (Threat as Cell).y))) && Threat?.piece?.canMove(this.cell)))){
+        (Math.abs(target.x - (Threat as Cell).x) === Math.abs(target.y - (Threat as Cell).y))) && Threat?.piece?.canMoveDowngraded(this.cell)) &&
+        Threat.piece.name !== PiecesNames.ROOK){
         return true;
       }
     }
@@ -43,7 +59,13 @@ export class King extends Piece{
         if(opponentPiece.piece && opponentPiece.piece.name === PiecesNames.PAWN && ((target.x === opponentPiece.x + 1 && target.y === opponentPiece.y + direction) || target.x === opponentPiece.x - 1 && target.y === opponentPiece.y + direction) && opponentPiece.piece?.color !== kingPosition.piece?.color){
           return true;
         }
-        if (opponentPiece.piece && opponentPiece.piece.name !== PiecesNames.PAWN && opponentPiece.piece.name !== PiecesNames.KING && opponentPiece.piece?.color !== kingPosition.piece?.color && opponentPiece.piece?.canMove(target)) {
+        // if (opponentPiece.piece && (opponentPiece.piece.name === PiecesNames.QUEEN || opponentPiece.piece.name === PiecesNames.ROOK) && opponentPiece.piece?.color !== kingPosition.piece?.color && (opponentPiece.isEmptyHorizontal(target) || opponentPiece.isEmptyVertical(target))) {
+        //   return true;
+        // }
+        // if (opponentPiece.piece && (opponentPiece.piece.name === PiecesNames.QUEEN || opponentPiece.piece.name === PiecesNames.BISHOP) && opponentPiece.piece?.color !== kingPosition.piece?.color && opponentPiece.isEmptyDiagonal(target)) {
+        //   return true;
+        // }
+        if (opponentPiece.piece && opponentPiece.piece.name !== PiecesNames.PAWN && opponentPiece.piece.name !== PiecesNames.KING && opponentPiece.piece?.color !== kingPosition.piece?.color && opponentPiece.piece?.canMoveDowngraded(target)) {
           return true;
         }
       }
@@ -86,18 +108,6 @@ export class King extends Piece{
     }
     if (target.piece && target.piece.isProtected()) {
       return false;
-    }
-    if(this.canCastling == true && this.color == Colors.WHITE&& this.cell.x == 4 && this.cell.y == 7 && (target.x == 6) && this.canCastling&& this.cell.isEmptyHorizontal(target) && this.cell.board.getCell(7, 7).piece?.name == PiecesNames.ROOK && this.isCheck == false && this.cell.board.getCell(6, 7).isEmpty() && this.cell.board.getCell(5, 7).isEmpty()){
-      return true;
-    }
-    if(this.canCastling == true && this.color == Colors.WHITE&& this.cell.x == 4 && this.cell.y == 7 && (target.x == 2) && this.canCastling&& this.cell.isEmptyHorizontal(target) && this.cell.board.getCell(0, 7).piece?.name == PiecesNames.ROOK && this.isCheck == false && this.cell.board.getCell(1, 7).isEmpty() && this.cell.board.getCell(2, 7).isEmpty()&& this.cell.board.getCell(3, 7).isEmpty()){
-      return true;
-    }
-    if(this.canCastling == true  && this.color == Colors.BLACK && this.cell.x == 4 && this.cell.y == 0 && (target.x == 6)  && this.canCastling && this.cell.isEmptyHorizontal(target)  && this.cell.board.getCell(7, 0).piece?.name == PiecesNames.ROOK  && this.isCheck == false  && this.cell.board.getCell(6, 0).isEmpty()  && this.cell.board.getCell(5, 0).isEmpty()){
-      return true;
-    }
-    if(this.canCastling == true  && this.color == Colors.BLACK && this.cell.x == 4 && this.cell.y == 0 && (target.x == 2)  && this.canCastling && this.cell.isEmptyHorizontal(target)  && this.cell.board.getCell(0, 0).piece?.name == PiecesNames.ROOK  && this.isCheck == false  && this.cell.board.getCell(1, 0).isEmpty()  && this.cell.board.getCell(2, 0).isEmpty() && this.cell.board.getCell(3, 0).isEmpty()){
-      return true;
     }
     
     const x = Math.abs(this.cell.x - target.x);
