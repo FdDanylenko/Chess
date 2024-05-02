@@ -1,4 +1,4 @@
-.game-result-window{
+.game-result-window {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -8,7 +8,7 @@
   padding: 10px;
   z-index: 5;
   border-radius: 10px;
-  background-color: rgba(38,36,33,255);
+  background-color: rgba(38, 36, 33, 255);
   color: #e9edcc;
   font-size: 16px;
   font-weight: 500;
@@ -19,15 +19,15 @@
   align-items: center;
   overflow: hidden;
 }
-.game-result__decoration{
+.game-result__decoration {
   position: absolute;
-  background-color: rgba(49,46,43,255);
+  background-color: rgba(49, 46, 43, 255);
   width: 100%;
   height: 30%;
   top: 0;
   z-index: 4;
 }
-.titles-box{
+.titles-box {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -35,15 +35,15 @@
   padding: 10px 0;
   z-index: 5;
 }
-.game-result__title{
+.game-result__title {
   font-size: 2rem;
   margin-bottom: 10px;
 }
-.game-result__subtitle{
+.game-result__subtitle {
   font-size: 1rem;
 }
 
-.players-box{
+.players-box {
   width: 85%;
   display: flex;
   align-items: center;
@@ -53,11 +53,11 @@
 }
 
 .white-player,
-.black-player{
+.black-player {
   width: 75px;
   height: 95px;
 }
-.game-result__player-icon{
+.game-result__player-icon {
   width: 65px;
   height: 65px;
   background-color: black;
@@ -68,34 +68,34 @@
   background-repeat: no-repeat;
   overflow: hidden;
 }
-.game-result__player-icon.bot{
+.game-result__player-icon.bot {
   background-image: url(../assets/player-icon.jpg);
   border: 5px solid #000000;
 }
-.game-result__player-name{
+.game-result__player-name {
   font-size: 0.7em;
   text-align: center;
 }
-.vs-text{
+.vs-text {
   display: block;
   font-size: 1em;
 }
-.buttons-box{
+.buttons-box {
   width: 85%;
   background-color: #e9edcc;
   border-radius: 10px;
 }
-.rematch-button{
+.rematch-button {
   width: 100%;
   aspect-ratio: 5 / 1;
   border-radius: 10px;
-  background-color: rgba(129,182,76,255);
+  background-color: rgba(129, 182, 76, 255);
   font-size: 1em;
   color: #e9edcc;
   font-weight: 900;
   border: 0;
 }
-.rematch-button:hover{
-  background-color: rgba(129,182,76,255);
+.rematch-button:hover {
+  background-color: rgba(129, 182, 76, 255);
   opacity: 0.9;
 }

@@ -1,5 +1,5 @@
-export enum Colors{
-  WHITE = 'white',
-  BLACK = 'black',
-  SELECTED = "#bbcb44"
+export enum Colors {
+  WHITE = "white",
+  BLACK = "black",
+  SELECTED = "#bbcb44",
 }

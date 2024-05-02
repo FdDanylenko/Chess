@@ -1,4 +1,4 @@
-.promotion-dialog{
+.promotion-dialog {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -17,13 +17,13 @@
   justify-content: center;
   align-items: center;
 }
-.pieces-box{
+.pieces-box {
   display: flex;
   width: 100%;
   justify-content: space-between;
   height: fit-content;
 }
-.piece-icon{
+.piece-icon {
   width: 85px;
   height: 85px;
   aspect-ratio: 1 / 1;
@@ -33,7 +33,7 @@
   justify-content: center;
   align-items: center;
 }
-.piece-icon img{
+.piece-icon img {
   width: 90%;
   aspect-ratio: 1 / 1;
   position: relative;
@@ -41,12 +41,12 @@
   justify-content: center;
   align-items: center;
 }
-.piece-icon:hover{
+.piece-icon:hover {
   background-color: rgba(48, 46, 43, 0.719);
 }
 
 @media (max-width: 580px) {
-  .piece-icon{
+  .piece-icon {
     width: 45px;
     height: 45px;
   }

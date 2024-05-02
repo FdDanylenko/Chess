@@ -1,4 +1,4 @@
-.history-box{
+.history-box {
   display: flex;
   width: calc(100% - 10px);
   position: absolute;
@@ -17,19 +17,23 @@
 .history-box::-webkit-scrollbar {
   display: none;
 }
+.history-box {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 @media (max-aspect-ratio: 1/1) {
-  .history-box:first-child{
+  .history-box:first-child {
     top: -3em;
   }
-  .history-box:last-child{
+  .history-box:last-child {
     bottom: -3em;
   }
 }
 @media (min-aspect-ratio: 1/1) {
-  .history-box:first-child{
+  .history-box:first-child {
     top: 0em;
   }
-  .history-box:last-child{
+  .history-box:last-child {
     bottom: 0em;
   }
 }

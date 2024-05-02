@@ -5,37 +5,46 @@ import { King } from "./pieces/King";
 import { Knight } from "./pieces/Knight";
 import { Pawn } from "./pieces/Pawn";
 import { Piece } from "./pieces/Piece";
+import { PiecesNames } from "./pieces/PiecesNames";
 import { Queen } from "./pieces/Queen";
 import { Rook } from "./pieces/Rook";
 
-export class Board{
-  cells: Cell[][] =[];
+interface move {
+  x: number;
+  y: number;
+  xx: number;
+  yy: number;
+}
+
+export class Board {
+  cells: Cell[][] = [];
   whiteLostPieces: Piece[] = [];
   blackLostPieces: Piece[] = [];
-  whiteMoves: string[] = [];
   blackMoves: string[] = [];
+  whiteMoves: string[] = [];
+  movesHistory: move[] = [];
+  blocked: boolean = false;
   public endGame: boolean = false;
-  public winner: string = "black";
-  public reason: string = "time run out";
+  public winner: string = "";
+  public reason: string = "";
   public previousPasant: Cell | null = null;
   public promotionDialog: boolean = false;
 
-  public initCells(){
+  public initCells() {
     for (let i = 0; i < 8; i++) {
-      const row: Cell[] = []
+      const row: Cell[] = [];
       for (let j = 0; j < 8; j++) {
-        if ((i+j)%2 !== 0) {
-          row.push(new Cell(this, j, i, Colors.BLACK, null)) //green
-        }
-        else{
-          row.push(new Cell(this, j, i, Colors.WHITE, null)) //white
+        if ((i + j) % 2 !== 0) {
+          row.push(new Cell(this, j, i, Colors.BLACK, null)); //green
+        } else {
+          row.push(new Cell(this, j, i, Colors.WHITE, null)); //white
         }
       }
       this.cells.push(row);
     }
   }
 
-  public setWinner(_winner: string, _reason: string){
+  public setWinner(_winner: string, _reason: string) {
     this.endGame = true;
     this.winner = _winner;
     this.reason = _reason;
@@ -57,9 +66,9 @@ export class Board{
     return newBoard;
   }
 
-  public highlightCells(selectedCell: Cell | null){
+  public highlightCells(selectedCell: Cell | null) {
     for (let i = 0; i < this.cells.length; i++) {
-      const row = this.cells[i]
+      const row = this.cells[i];
       for (let j = 0; j < row.length; j++) {
         const target = row[j];
         target.available = !!selectedCell?.piece?.canMove(target);
@@ -67,16 +76,19 @@ export class Board{
     }
   }
 
-  public getCell(x: number, y: number){
+  public getCell(x: number, y: number) {
     return this.cells[y][x];
   }
 
   public findKing(board: Board, color: Colors): Cell | void {
     const cells = board.cells.flat();
-    return cells.find((cell) => cell.piece?.color === color && cell.piece instanceof King);
+    return cells.find(
+      (cell) =>
+        cell.piece?.color === color && cell.piece.name === PiecesNames.KING
+    );
   }
 
-  public addPieces(){
+  public addPieces() {
     new King(Colors.WHITE, this.getCell(4, 7));
     new Queen(Colors.WHITE, this.getCell(3, 7));
     new Bishop(Colors.WHITE, this.getCell(2, 7));
